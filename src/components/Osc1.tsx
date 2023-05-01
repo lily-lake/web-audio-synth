@@ -1,9 +1,9 @@
 
 const Osc1 = (props: { changeFreq: (e: any) => void, freq: number }) => {
-    const { changeFreq } = props;
+    const { changeFreq, freq } = props;
     return (
         <div>
-            <input type="range" max="5000" id="frequency" onChange={changeFreq} />
+            <input type="range" max="5000" value={freq} id="frequency" onChange={changeFreq} />
         </div>
     )
 }

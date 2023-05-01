@@ -1,22 +1,23 @@
 import { ChangeEvent, useState } from 'react'
 import './App.scss'
 import Osc1 from './components/Osc1';
+let audioContext = new AudioContext()
+let out = audioContext.destination
+let osc1 = audioContext.createOscillator();
+let gain1 = audioContext.createGain();
+
+osc1.connect(gain1)
+gain1.connect(out)
 
 function App() {
-  let audioContext = new AudioContext()
-  let out = audioContext.destination
-  let osc1 = audioContext.createOscillator();
-  let gain1 = audioContext.createGain();
-
-  osc1.connect(gain1)
-  gain1.connect(out)
-
+  const [osc1Freq, setOsc1Freq] = useState(osc1.frequency.value)
   // osc1.start();
 
   const changeOsc1Freq = (e: ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value);
     let value = parseInt(e.target.value);
     osc1.frequency.value = value;
+    setOsc1Freq(value)
   }
 
   return (
@@ -24,7 +25,7 @@ function App() {
       <h1>Placeholder</h1>
       <button onClick={() => osc1.start()}>Start</button>
       <button onClick={() => osc1.stop()}>Stop</button>
-      <Osc1 changeFreq={changeOsc1Freq} />
+      <Osc1 changeFreq={changeOsc1Freq} freq={osc1Freq} />
     </>
   )
 }
