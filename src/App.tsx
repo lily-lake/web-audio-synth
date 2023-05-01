@@ -1,15 +1,19 @@
 import { ChangeEvent, useState } from 'react'
 import './App.scss'
 import Osc1 from './components/Osc1';
+import Filter from './components/Filter';
 let audioContext = new AudioContext()
 let out = audioContext.destination
 let osc1 = audioContext.createOscillator();
 let gain1 = audioContext.createGain();
+let filter = audioContext.createBiquadFilter();
 
 osc1.connect(gain1)
-gain1.connect(out)
+gain1.connect(filter)
+filter.connect(out);
 
-type Setting = "frequency" | "detune"
+type OscSetting = "frequency" | "detune"
+type FilterSetting = "frequency" | "detune" | "Q" | "gain"
 
 function App() {
   const [osc1Settings, setOsc1Settings] = useState({
@@ -18,10 +22,18 @@ function App() {
     type: osc1.type
   })
 
+  const [filterSettings, setFilterSettings] = useState({
+    frequency: filter.frequency.value,
+    detune: filter.detune.value,
+    Q: filter.Q.value,
+    gain: filter.gain.value,
+    type: filter.type,
+  })
+
   const changeOsc1 = (e: ChangeEvent<HTMLInputElement>) => {
     let { value, id } = e.target;
     setOsc1Settings({ ...osc1Settings, [id]: value });
-    osc1[id as Setting].value = parseInt(value);
+    osc1[id as OscSetting].value = parseInt(value);
   }
 
   const changeOsc1Type = (e: ChangeEvent) => {
@@ -31,12 +43,31 @@ function App() {
     osc1.type = id as OscillatorType;
   }
 
+  const changeFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    let { value, id } = e.target;
+    console.log(value, id)
+    setFilterSettings({ ...filterSettings, [id]: value });
+    filter[id as FilterSetting].value = parseInt(value);
+  }
+
+  const changeFilterType = (e: ChangeEvent) => {
+    let { id } = e.target;
+    setFilterSettings({ ...filterSettings, type: id as BiquadFilterType })
+    filter.type = id as BiquadFilterType;
+
+  }
+
   return (
     <>
       <h1>Placeholder</h1>
       <button onClick={() => osc1.start()}>Start</button>
       <button onClick={() => osc1.stop()}>Stop</button>
       <Osc1 change={changeOsc1} settings={osc1Settings} changeType={changeOsc1Type} />
+      <Filter
+        change={changeFilter}
+        settings={filterSettings}
+        changeType={changeFilterType}
+      />
     </>
   )
 }
