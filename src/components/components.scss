@@ -12,3 +12,20 @@ body {
     grid-template-columns: 100%;
     justify-content: center;
 }
+
+.active {
+    background: rgb(78, 19, 103);
+    color: white;
+}
+
+button {
+    font-size: 1.4rem;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: rgb(210, 143, 238);
+    }
+}
