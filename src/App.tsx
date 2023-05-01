@@ -9,6 +9,8 @@ let gain1 = audioContext.createGain();
 osc1.connect(gain1)
 gain1.connect(out)
 
+type Setting = "frequency" | "detune"
+
 function App() {
   const [osc1Settings, setOsc1Settings] = useState({
     frequency: osc1.frequency.value,
@@ -19,7 +21,7 @@ function App() {
   const changeOsc1 = (e: ChangeEvent<HTMLInputElement>) => {
     let { value, id } = e.target;
     setOsc1Settings({ ...osc1Settings, [id]: value });
-    osc1[id].value = value;
+    osc1[id as Setting].value = parseInt(value);
   }
 
   const changeOsc1Type = (e: ChangeEvent) => {
