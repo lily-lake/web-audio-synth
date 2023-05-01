@@ -1,0 +1,14 @@
+body {
+    background: rgb(17, 80, 108);
+    color: white;
+    font-family: sans-serif;
+}
+
+.control {
+    background: rgba(0, 0, 0, 0.509);
+    padding: 0.5rem;
+    margin: 1.5rem;
+    display: grid;
+    grid-template-columns: 100%;
+    justify-content: center;
+}
