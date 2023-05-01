@@ -1,22 +1,25 @@
 interface Osc1Props {
-    changeFreq: (e: any) => void;
-    freq: number;
-    changeDetune: (e: any) => void;
+    change: (e: any) => void;
+    settings: Osc1Settings
+}
+
+interface Osc1Settings {
+    frequency: number;
     detune: number;
 }
 
 const Osc1 = (props: Osc1Props) => {
-    const { changeFreq, freq, changeDetune, detune } = props;
+    const { change, settings } = props;
     return (
         <div className="control">
             <h2>Osc 1</h2>
             <div className="param">
                 <h3>Frequency</h3>
-                <input type="range" max="5000" value={freq} id="frequency" onChange={changeFreq} />
+                <input type="range" max="5000" value={settings.frequency} id="frequency" onChange={change} />
             </div>
             <div className="param">
                 <h3>Detune</h3>
-                <input type="range" id="detune" onChange={changeDetune} value={detune} />
+                <input type="range" id="detune" onChange={change} value={settings.detune} />
             </div>
         </div>
     )

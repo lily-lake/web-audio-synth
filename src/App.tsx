@@ -10,22 +10,15 @@ osc1.connect(gain1)
 gain1.connect(out)
 
 function App() {
-  const [osc1Freq, setOsc1Freq] = useState(osc1.frequency.value)
-  const [osc1Detune, setOsc1Detune] = useState(osc1.detune.value)
-  // osc1.start();
+  const [osc1Settings, setOsc1Settings] = useState({
+    frequency: osc1.frequency.value,
+    detune: osc1.detune.value
+  })
 
-  const changeOsc1Freq = (e: ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
-    let value = parseInt(e.target.value);
-    osc1.frequency.value = value;
-    setOsc1Freq(value)
-  }
-
-  const changeOsc1Detune = (e: ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
-    let value = parseInt(e.target.value);
-    osc1.detune.value = value;
-    setOsc1Detune(value)
+  const changeOsc1 = (e: ChangeEvent<HTMLInputElement>) => {
+    let { value, id } = e.target;
+    setOsc1Settings({ ...osc1Settings, [id]: value });
+    osc1[id].value = value;
   }
 
   return (
@@ -33,7 +26,7 @@ function App() {
       <h1>Placeholder</h1>
       <button onClick={() => osc1.start()}>Start</button>
       <button onClick={() => osc1.stop()}>Stop</button>
-      <Osc1 changeFreq={changeOsc1Freq} freq={osc1Freq} changeDetune={changeOsc1Detune} detune={osc1Detune} />
+      <Osc1 change={changeOsc1} settings={osc1Settings} />
     </>
   )
 }
