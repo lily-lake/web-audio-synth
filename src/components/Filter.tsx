@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext } from 'react'
-import { CTX } from '../store';
+import { CTX } from '../Store';
 // interface FilterSettings {
 //     frequency: number;
 //     detune: number;

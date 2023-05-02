@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { CTX } from '../store'
+import { CTX } from '../Store'
 import * as QwertyHancock from 'qwerty-hancock';
 console.log("QwertyHancock: ", QwertyHancock)
 // import { QwertyHancock } from 'qwerty-hancock';

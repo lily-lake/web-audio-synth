@@ -11,7 +11,7 @@ export default class Osc {
     gateGain: GainNode;
     easing: number;
     envelope: Envelope;
-    constructor(actx: AudioContext, type, frequency, detune, envelope: Envelope | undefined, connection) {
+    constructor(actx: AudioContext, type, frequency, detune, envelope: Envelope | null, connection) {
         this.actx = actx;
         this.envelope = envelope || {
             attack: 0.005,
@@ -29,14 +29,21 @@ export default class Osc {
         this.gateGain.connect(connection);
         this.easing = 0.005;
         this.osc.start();
+        this.start();
     }
     start() {
         let { currentTime } = this.actx;
         this.gateGain.gain.cancelScheduledValues(currentTime);
         this.gateGain.gain.setValueAtTime(0, currentTime + this.easing);
-        this.gateGain.gain.linearRampToValueAtTime(1, currentTime + this.envelope.attack + this.easing)
+        this.gateGain.gain.linearRampToValueAtTime(1, currentTime + this.envelope.attack + this.easing);
+        this.gateGain.gain.linearRampToValueAtTime(this.envelope.sustain, currentTime + this.envelope.attack + this.envelope.decay + this.easing)
     }
     stop() {
-
+        let { currentTime } = this.actx;
+        this.gateGain.gain.cancelScheduledValues(currentTime);
+        this.gateGain.gain.setTargetAtTime(0, currentTime, this.envelope.release + this.easing);
+        setTimeout(() => {
+            this.osc.disconnect();
+        }, 10000);
     }
 }

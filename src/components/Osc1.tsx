@@ -11,7 +11,7 @@ interface Osc1Props {
 // }
 
 import React, { ChangeEvent, useContext } from 'react';
-import { CTX, osc1 } from '../store'
+import { CTX, osc1 } from '../Store'
 
 const Osc1 = () => {
     const [appState, updateState] = useContext(CTX);

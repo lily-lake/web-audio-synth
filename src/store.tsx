@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-
+import Osc from "./components/Osc";
 // let audioContext: AudioContext;
 // let out;
 // let osc1: OscillatorNode;
@@ -20,11 +20,11 @@ import React, { ReactNode } from "react";
 
 // osc1.start();
 
-let audioContext = new AudioContext()
-let out = audioContext.destination
-let osc1 = audioContext.createOscillator();
-let gain1 = audioContext.createGain();
-let filter = audioContext.createBiquadFilter();
+let actx = new AudioContext()
+let out = actx.destination
+let osc1 = actx.createOscillator();
+let gain1 = actx.createGain();
+let filter = actx.createBiquadFilter();
 osc1.connect(gain1)
 gain1.connect(filter)
 filter.connect(out);
@@ -92,6 +92,7 @@ export function reducer(state: State, action: Action) {
     switch (action.type) {
         case "MAKE_OSC":
             console.log('make osc, note and freq: ', note, freq);
+            const newOsc = new Osc(actx, "sawtooth", freq, 0, null, gain1);
             return { ...state };
         case "KILL_OSC":
             console.log('kill osc, note and freq: ', note, freq);
@@ -109,11 +110,11 @@ export function reducer(state: State, action: Action) {
         //     osc1.stop();
         //     return { ...state };
         case "START_OSC":
-            audioContext = new AudioContext();
-            out = audioContext.destination
-            osc1 = audioContext.createOscillator();
-            gain1 = audioContext.createGain();
-            filter = audioContext.createBiquadFilter();
+            actx = new AudioContext();
+            out = actx.destination
+            osc1 = actx.createOscillator();
+            gain1 = actx.createGain();
+            filter = actx.createBiquadFilter();
             osc1.connect(gain1)
             gain1.connect(filter)
             filter.connect(out);
