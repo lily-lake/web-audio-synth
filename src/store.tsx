@@ -85,17 +85,29 @@ type State = {
     filterSettings: FilterSettings;
 }
 
+let nodes: Osc[] = [];
+
 export function reducer(state: State, action: Action) {
     let { id, value, note, freq } = action.payload || {};
     console.log('state: ', state)
     console.log('action: ', action)
     switch (action.type) {
         case "MAKE_OSC":
-            console.log('make osc, note and freq: ', note, freq);
+            // console.log('make osc, note and freq: ', note, freq);
             const newOsc = new Osc(actx, "sawtooth", freq, 0, null, gain1);
+            nodes.push(newOsc);
             return { ...state };
         case "KILL_OSC":
-            console.log('kill osc, note and freq: ', note, freq);
+            let newNodes: Osc[] = [];
+            nodes.forEach(node => {
+                if (Math.round(node.osc.frequency.value) === Math.round(freq)) {
+                    node.stop();
+                } else {
+                    newNodes.push(node);
+                }
+            });
+            nodes = newNodes;
+            // console.log('kill osc, note and freq: ', note, freq);
             return { ...state };
         // case "START_OSC":
         //     console.log('start osc')

@@ -27,7 +27,7 @@ const Keyboard = () => {
         keyboard.keyDown = (note, freq) => {
             updateState({ type: "MAKE_OSC", payload: { note, freq } })
         };
-        keyboard.keyUP = (note, freq) => {
+        keyboard.keyUp = (note, freq) => {
             updateState({ type: "KILL_OSC", payload: { note, freq } })
         }
     }, [])
