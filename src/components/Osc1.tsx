@@ -1,21 +1,38 @@
 interface Osc1Props {
-    change: (e: any) => void;
+    // change: (e: any) => void;
     changeType: (e: any) => void;
-    settings: Osc1Settings
+    // settings: Osc1Settings
 }
 
-interface Osc1Settings {
-    frequency: number;
-    detune: number;
-    type: OscillatorType;
-}
+// interface Osc1Settings {
+//     frequency: number;
+//     detune: number;
+//     type: OscillatorType;
+// }
 
-const Osc1 = (props: Osc1Props) => {
-    const { change, settings, changeType } = props;
-    const { type, frequency, detune } = settings;
+import React, { ChangeEvent, useContext } from 'react';
+import { CTX, osc1 } from '../store'
+
+const Osc1 = () => {
+    const [appState, updateState] = useContext(CTX);
+    const { type, frequency, detune } = appState.osc1Settings;
+
+    const change = (e: ChangeEvent) => {
+        let { id, value } = e.target;
+        updateState({ type: 'CHANGE_OSC1', payload: { id, value } })
+    }
+
+    const changeType = (e: ChangeEvent) => {
+        let { id } = e.target;
+        updateState({ type: "CHANGE_OSC1_TYPE", payload: { id } })
+    }
     return (
         <div className="control">
             <h2>Osc 1</h2>
+            <button onClick={() => osc1.start()}>Start</button>
+            <button onClick={() => osc1.stop()}>Stop</button>
+            {/* <button onClick={() => updateState({ type: "START_OSC" })}>Start</button>
+            <button onClick={() => updateState({ type: "STOP_OSC" })}>Stop</button> */}
             <div className="param">
                 <h3>Frequency</h3>
                 <input type="range" max="5000" value={frequency} id="frequency" onChange={change} />

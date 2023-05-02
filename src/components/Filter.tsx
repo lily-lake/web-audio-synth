@@ -1,22 +1,26 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useContext } from 'react'
+import { CTX } from '../store';
+// interface FilterSettings {
+//     frequency: number;
+//     detune: number;
+//     Q: number;
+//     gain: number;
+//     type: BiquadFilterType;
+// }
 
-interface FilterProps {
-    change: (e: ChangeEvent<HTMLInputElement>) => void;
-    settings: FilterSettings;
-    changeType: (e: any) => void;
-}
+const Filter = () => {
+    const [appState, updateState] = useContext(CTX);
+    const { frequency, detune, Q, gain, type } = appState.filterSettings;
 
-interface FilterSettings {
-    frequency: number;
-    detune: number;
-    Q: number;
-    gain: number;
-    type: BiquadFilterType;
-}
+    const change = (e: ChangeEvent<HTMLInputElement>) => {
+        let { id, value } = e.target;
+        updateState({ type: 'CHANGE_FILTER', payload: { id, value } })
+    };
 
-const Filter = (props: FilterProps) => {
-    const { change, settings, changeType } = props;
-    const { frequency, detune, Q, gain, type } = settings;
+    const changeType = (e: ChangeEvent) => {
+        let { id } = e.target;
+        updateState({ type: 'CHANGE_FILTER_TYPE', payload: { id } })
+    }
     return (
         <div className="control">
             <h2>Filter</h2>

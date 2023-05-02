@@ -24,6 +24,8 @@ button {
     margin: 0.5rem;
     transition: all 0.3s ease;
     cursor: pointer;
+    width: 10rem;
+    border-radius: .5rem;
 
     &:hover {
         background: rgb(210, 143, 238);
