@@ -54,6 +54,7 @@ type ActionType = | 'START_OSC'
     | 'CHANGE_OSC1'
     | 'CHANGE_OSC1_TYPE'
     | 'CHANGE_FILTER'
+    | 'CHANGE_FILTER_TYPE'
     | 'MAKE_OSC'
     | 'KILL_OSC'
     | 'default'
@@ -144,6 +145,9 @@ export function reducer(state: State, action: Action) {
             filter[id as FilterSetting].value = value;
             // return { ...state }
             return { ...state, filterSettings: { ...state.filterSettings, [id]: value } }
+        case "CHANGE_FILTER_TYPE":
+            filter.type = id;
+            return { ...state, filterSettings: { ...state.filterSettings, type: id } }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };
