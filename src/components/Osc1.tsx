@@ -15,7 +15,8 @@ import { CTX, osc1 } from '../store'
 
 const Osc1 = () => {
     const [appState, updateState] = useContext(CTX);
-    const { type, frequency, detune } = appState.osc1Settings;
+    console.log("appState: ", appState)
+    const { type, frequency, detune } = appState?.osc1Settings;
 
     const change = (e: ChangeEvent) => {
         let { id, value } = e.target;

@@ -587,6 +587,7 @@
         this.setKeyMap = function(newKeyMap){};
 
         init.call(this, settings);
+        return this;
     };
 
     if (typeof exports !== 'undefined') {
