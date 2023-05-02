@@ -12,7 +12,6 @@
 (function () {
     // var root = this;
     var root = window;
-    debugger;
     /* In <script> context, `this` is the window.
      * In node context (browserify), `this` is the node global.
      */
