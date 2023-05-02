@@ -87,7 +87,6 @@ type State = {
 
 export function reducer(state: State, action: Action) {
     let { id, value, note, freq } = action.payload || {};
-    console.log('reducer')
     console.log('state: ', state)
     console.log('action: ', action)
     switch (action.type) {
