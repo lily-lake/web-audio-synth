@@ -4,9 +4,9 @@ import App from './App.tsx'
 import Store from './Store.tsx'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Store>
-      <App />
-    </Store>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Store>
+    <App />
+  </Store>
+  // </React.StrictMode>,
 )

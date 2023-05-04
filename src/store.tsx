@@ -4,6 +4,7 @@ import Osc from "./components/Osc";
 let actx = new AudioContext()
 let out = actx.destination
 let gain1 = actx.createGain();
+// gain1.gain.value = 0.2;
 let filter = actx.createBiquadFilter();
 gain1.connect(filter)
 filter.connect(out);
@@ -23,6 +24,7 @@ export type REDUCER_ACTION_TYPE =
     { type: 'CHANGE_FILTER_TYPE', payload: { id: string } } |
     { type: 'MAKE_OSC', payload: { note: string, frequency: number } } |
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
+    { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
     { type: 'default', payload: '' }
 
 type FilterSettings = {
@@ -37,9 +39,17 @@ type Osc1Settings = {
     detune: number;
     type: OscillatorType;
 }
+
+type EnvelopeSettings = {
+    attack: number;
+    decay: number;
+    sustain: number;
+    release: number;
+}
 type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
+    envelope: EnvelopeSettings;
 }
 
 const initialState: ReducerState = {
@@ -54,6 +64,12 @@ const initialState: ReducerState = {
         Q: filter.Q.value || 0,
         gain: filter.gain.value || 0,
         type: filter.type || 'lowpass',
+    },
+    envelope: {
+        attack: 0.005,
+        decay: 0.1,
+        sustain: 0.6,
+        release: 0.1
     }
 }
 
@@ -71,13 +87,9 @@ export const CTX = React.createContext<ContextType>({
 let nodes: Osc[] = [];
 
 export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): ReducerState => {
-    // let { id, value, freq } = action.payload || {};
-    console.log('state: ', state)
-    console.log('action: ', action)
     switch (action.type) {
         case 'MAKE_OSC':
-            // console.log('make osc, note and freq: ', note, freq);
-            const newOsc = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, null, gain1);
+            const newOsc = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, state.envelope, gain1);
             nodes.push(newOsc);
             return { ...state };
         case 'KILL_OSC':
@@ -101,6 +113,8 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
         case 'CHANGE_FILTER_TYPE':
             filter.type = action.payload.id as BiquadFilterType;
             return { ...state, filterSettings: { ...state.filterSettings, type: action.payload.id as BiquadFilterType } }
+        case 'CHANGE_ADSR':
+            return { ...state, envelope: { ...state.envelope, [action.payload.id]: action.payload.value } }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };
@@ -120,6 +134,12 @@ export default function Store(props: { children: ReactNode }) {
             Q: filter.Q.value,
             gain: filter.gain.value,
             type: filter.type,
+        },
+        envelope: {
+            attack: 0.005,
+            decay: 0.1,
+            sustain: 0.6,
+            release: 0.1
         }
     });
     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>

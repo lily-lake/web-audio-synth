@@ -3,6 +3,7 @@ import Osc1 from './components/Osc1';
 import Filter from './components/Filter';
 // import Context from './components/Context';
 import Keyboard from './components/Keyboard';
+import ADSR from './components/ADSR';
 
 function App() {
 
@@ -11,8 +12,11 @@ function App() {
     <>
       <h1>Oscillator</h1>
       {/* <Context /> */}
-      <Osc1 />
-      <Filter />
+      <div className="controls">
+        <Osc1 />
+        <ADSR />
+        <Filter />
+      </div>
       <Keyboard />
     </>
   )

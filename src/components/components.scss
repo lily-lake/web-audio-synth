@@ -35,3 +35,9 @@ button {
         outline: 0;
     }
 }
+
+.keyboard-container {
+    display: grid;
+    width: 100%;
+    justify-content: center;
+}

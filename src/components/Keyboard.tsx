@@ -76,7 +76,7 @@ const Keyboard = () => {
         }
     }, [])
     return (
-        <div><div id="keyboard"></div></div>
+        <div className="keyboard-container"><div id="keyboard"></div></div>
     )
 }
 
