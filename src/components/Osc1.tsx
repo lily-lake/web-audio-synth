@@ -14,7 +14,7 @@ import { MouseEvent, ChangeEvent, useContext } from 'react';
 import { CTX, osc1 } from '../Store'
 
 const Osc1 = () => {
-    const [appState, updateState] = useContext(CTX);
+    const { appState, updateState } = useContext(CTX);
     // console.log("appState: ", appState)
     const { type, frequency, detune } = appState?.osc1Settings;
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, useReducer } from "react";
+import React, { ReactNode, useReducer, Dispatch } from "react";
 import Osc from "./components/Osc";
 // let audioContext: AudioContext;
 // let out;
@@ -22,35 +22,18 @@ import Osc from "./components/Osc";
 
 let actx = new AudioContext()
 let out = actx.destination
-let osc1 = actx.createOscillator();
+export let osc1 = actx.createOscillator();
 let gain1 = actx.createGain();
 let filter = actx.createBiquadFilter();
 osc1.connect(gain1)
 gain1.connect(filter)
 filter.connect(out);
 
-const initialState: State = {
-    osc1Settings: {
-        frequency: osc1.frequency.value || 0,
-        detune: osc1.detune.value || 0,
-        type: osc1.type || 'sine'
-    },
-    filterSettings: {
-        frequency: filter.frequency.value || 0,
-        detune: filter.detune.value || 0,
-        Q: filter.Q.value || 0,
-        gain: filter.gain.value || 0,
-        type: filter.type || 'lowpass',
-    }
-}
-
-const CTX = React.createContext(initialState);
-export { CTX, osc1 }
 
 export type OscSetting = "frequency" | "detune"
 type FilterSetting = "frequency" | "detune" | "Q" | "gain"
 
-const enum REDUCER_ACTION_TYPE {
+export const enum REDUCER_ACTION_TYPE {
     START_OSC,
     STOP_OSC,
     CHANGE_OSC1,
@@ -83,14 +66,44 @@ type Osc1Settings = {
     detune: number;
     type: OscillatorType;
 }
-type State = {
+type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
 }
 
+const initialState: ReducerState = {
+    osc1Settings: {
+        frequency: osc1.frequency.value || 0,
+        detune: osc1.detune.value || 0,
+        type: osc1.type || 'sine'
+    },
+    filterSettings: {
+        frequency: filter.frequency.value || 0,
+        detune: filter.detune.value || 0,
+        Q: filter.Q.value || 0,
+        gain: filter.gain.value || 0,
+        type: filter.type || 'lowpass',
+    }
+}
+
+interface ContextType {
+    appState: ReducerState;
+    updateState: Dispatch<ReducerAction>;
+}
+
+export const CTX = React.createContext<ContextType>({
+    appState: initialState,
+    updateState: () => { },
+});
+
+// export const CTX = React.createContext({initialState
+// });
+
+
+
 let nodes: Osc[] = [];
 
-export const reducer = (state: State, action: ReducerAction): State => {
+export const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
     let { id, value, freq } = action.payload || {};
     console.log('state: ', state)
     console.log('action: ', action)
@@ -187,5 +200,5 @@ export default function Store(props: { children: ReactNode }) {
     });
     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
 
-    return <CTX.Provider value={[appState, updateState]} > {props.children}</CTX.Provider >
+    return <CTX.Provider value={{ appState, updateState }} > {props.children}</CTX.Provider >
 }

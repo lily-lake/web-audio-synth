@@ -6,7 +6,7 @@ console.log("QwertyHancock: ", QwertyHancock)
 
 
 const Keyboard = () => {
-    const [appState, updateState] = useContext(CTX);
+    const { updateState } = useContext(CTX);
 
     useEffect(() => {
         const keyboard = window.QwertyHancock({

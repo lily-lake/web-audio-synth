@@ -9,7 +9,7 @@ import { CTX } from '../Store';
 // }
 
 const Filter = () => {
-    const [appState, updateState] = useContext(CTX);
+    const { appState, updateState } = useContext(CTX);
     const { frequency, detune, Q, gain, type } = appState.filterSettings;
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
