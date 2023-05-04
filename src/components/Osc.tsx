@@ -45,6 +45,7 @@ export default class Osc {
         this.gateGain.gain.setTargetAtTime(0, currentTime, this.envelope.release + this.easing);
         setTimeout(() => {
             this.osc.disconnect();
-        }, 10000);
+        }, 3000);
+        // }, 10000);
     }
 }

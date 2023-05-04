@@ -36,6 +36,10 @@ button {
     }
 }
 
+input:focus {
+    outline: 0;
+}
+
 .keyboard-container {
     display: grid;
     width: 100%;
