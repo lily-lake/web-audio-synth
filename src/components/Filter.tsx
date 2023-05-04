@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext } from 'react'
+import { ChangeEvent, MouseEvent, useContext } from 'react'
 import { CTX } from '../Store';
 // interface FilterSettings {
 //     frequency: number;
@@ -17,8 +17,8 @@ const Filter = () => {
         updateState({ type: 'CHANGE_FILTER', payload: { id, value } })
     };
 
-    const changeType = (e: ChangeEvent) => {
-        let { id } = e.target;
+    const changeType = (e: MouseEvent<HTMLButtonElement>) => {
+        let { id } = e.target as HTMLElement;
         updateState({ type: 'CHANGE_FILTER_TYPE', payload: { id } })
     }
     return (

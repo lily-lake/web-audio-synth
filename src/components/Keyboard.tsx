@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { CTX } from '../Store'
 import * as QwertyHancock from 'qwerty-hancock';
 console.log("QwertyHancock: ", QwertyHancock)

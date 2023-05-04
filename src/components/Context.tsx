@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext } from 'react';
+import { useContext } from 'react';
 import { CTX } from '../Store'
 
 const Context = () => {

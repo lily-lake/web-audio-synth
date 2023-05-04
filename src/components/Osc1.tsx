@@ -10,7 +10,7 @@ interface Osc1Props {
 //     type: OscillatorType;
 // }
 
-import React, { ChangeEvent, useContext } from 'react';
+import { MouseEvent, ChangeEvent, useContext } from 'react';
 import { CTX, osc1 } from '../Store'
 
 const Osc1 = () => {
@@ -18,13 +18,13 @@ const Osc1 = () => {
     // console.log("appState: ", appState)
     const { type, frequency, detune } = appState?.osc1Settings;
 
-    const change = (e: ChangeEvent) => {
+    const change = (e: ChangeEvent<HTMLInputElement>) => {
         let { id, value } = e.target;
         updateState({ type: 'CHANGE_OSC1', payload: { id, value } })
     }
 
-    const changeType = (e: ChangeEvent) => {
-        let { id } = e.target;
+    const changeType = (e: MouseEvent<HTMLButtonElement>) => {
+        let { id } = e.target as HTMLElement;
         updateState({ type: "CHANGE_OSC1_TYPE", payload: { id } })
     }
     return (
