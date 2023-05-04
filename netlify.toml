@@ -1,7 +1,7 @@
 # example netlify.toml
 [build]
 #   command = "npm install && cd ./qwerty-hancock && npm link && cd .. && npm link qwerty-hancock && npm run build"
-  command = "npm install && npm run build"
+#   command = "npm install && npm run build"
   functions = "netlify/functions"
   publish = "dist"
 
