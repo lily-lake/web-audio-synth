@@ -33,27 +33,43 @@ filter.connect(out);
 export type OscSetting = "frequency" | "detune"
 type FilterSetting = "frequency" | "detune" | "Q" | "gain"
 
-export const enum REDUCER_ACTION_TYPE {
-    START_OSC,
-    STOP_OSC,
-    CHANGE_OSC1,
-    CHANGE_OSC1_TYPE,
-    CHANGE_FILTER,
-    CHANGE_FILTER_TYPE,
-    MAKE_OSC,
-    KILL_OSC,
-    default
-}
+export type REDUCER_ACTION_TYPE =
+    { type: 'START_OSC', payload: string } |
+    { type: 'STOP_OSC', payload: string } |
+    { type: 'START_CONTEXT', payload: string } |
+    { type: 'STOP_CONTEXT', payload: string } |
+    { type: 'CHANGE_OSC1', payload: { id: OscSetting, value: number } } |
+    { type: 'CHANGE_OSC1_TYPE', payload: { id: string } } |
+    { type: 'CHANGE_FILTER', payload: { id: string, value: number } } |
+    { type: 'CHANGE_FILTER_TYPE', payload: { id: string } } |
+    { type: 'MAKE_OSC', payload: { note: string, frequency: number } } |
+    { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
+    { type: 'default', payload: '' }
 
-type ReducerAction = {
-    payload: {
-        id?: string;
-        value?: number | string;
-        note?: any;
-        freq?: number;
-    };
-    type: REDUCER_ACTION_TYPE;
-}
+
+// export const enum REDUCER_ACTION_TYPE {
+//     START_OSC,
+//     STOP_OSC,
+//     START_CONTEXT,
+//     STOP_CONTEXT,
+//     CHANGE_OSC1,
+//     CHANGE_OSC1_TYPE,
+//     CHANGE_FILTER,
+//     CHANGE_FILTER_TYPE,
+//     MAKE_OSC,
+//     KILL_OSC,
+//     default
+// }
+
+// type ReducerAction = {
+//     payload?: {
+//         id?: string;
+//         value?: number;
+//         note?: any;
+//         freq?: number;
+//     };
+//     type: REDUCER_ACTION_TYPE;
+// }
 type FilterSettings = {
     frequency: number;
     detune: number;
@@ -88,7 +104,8 @@ const initialState: ReducerState = {
 
 interface ContextType {
     appState: ReducerState;
-    updateState: Dispatch<ReducerAction>;
+    // updateState: Dispatch<ReducerAction>;
+    updateState: Dispatch<REDUCER_ACTION_TYPE>;
 }
 
 export const CTX = React.createContext<ContextType>({
@@ -103,20 +120,21 @@ export const CTX = React.createContext<ContextType>({
 
 let nodes: Osc[] = [];
 
-export const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
-    let { id, value, freq } = action.payload || {};
+// export const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
+export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): ReducerState => {
+    // let { id, value, freq } = action.payload || {};
     console.log('state: ', state)
     console.log('action: ', action)
     switch (action.type) {
-        case REDUCER_ACTION_TYPE.MAKE_OSC:
+        case 'MAKE_OSC':
             // console.log('make osc, note and freq: ', note, freq);
-            const newOsc = new Osc(actx, "sawtooth", freq, 0, null, gain1);
+            const newOsc = new Osc(actx, "sawtooth", action.payload.frequency, 0, null, gain1);
             nodes.push(newOsc);
             return { ...state };
-        case REDUCER_ACTION_TYPE.KILL_OSC:
+        case 'KILL_OSC':
             let newNodes: Osc[] = [];
             nodes.forEach(node => {
-                if (Math.round(node.osc.frequency.value) === Math.round(freq)) {
+                if (Math.round(node.osc.frequency.value) === Math.round(action.payload.frequency)) {
                     node.stop();
                 } else {
                     newNodes.push(node);
@@ -125,7 +143,7 @@ export const reducer = (state: ReducerState, action: ReducerAction): ReducerStat
             nodes = newNodes;
             // console.log('kill osc, note and freq: ', note, freq);
             return { ...state };
-        // case REDUCER_ACTION_TYPE.START_OSC:
+        // case 'START_OSC':
         //     console.log('start osc')
         //     // gain1 = audioContext.createGain();
         //     // filter = audioContext.createBiquadFilter();
@@ -134,10 +152,10 @@ export const reducer = (state: ReducerState, action: ReducerAction): ReducerStat
         //     // filter.connect(out);
         //     osc1.start();
         //     return { ...state };
-        // case REDUCER_ACTION_TYPE.STOP_OSC:
+        // case 'STOP_OSC':
         //     osc1.stop();
         //     return { ...state };
-        case REDUCER_ACTION_TYPE.START_OSC:
+        case 'START_OSC':
             actx = new AudioContext();
             out = actx.destination
             osc1 = actx.createOscillator();
@@ -147,35 +165,35 @@ export const reducer = (state: ReducerState, action: ReducerAction): ReducerStat
             gain1.connect(filter)
             filter.connect(out);
             return { ...state };
-        case REDUCER_ACTION_TYPE.STOP_OSC:
+        case 'STOP_OSC':
             // osc1.stop();
             return { ...state };
-        // case REDUCER_ACTION_TYPE.START_CONTEXT:
-        //     audioContext = new AudioContext();
-        //     out = audioContext.destination
-        //     osc1 = audioContext.createOscillator();
-        //     gain1 = audioContext.createGain();
-        //     filter = audioContext.createBiquadFilter();
-        //     osc1.connect(gain1)
-        //     gain1.connect(filter)
-        //     filter.connect(out);
-        //     return { ...state };
-        // case REDUCER_ACTION_TYPE.STOP_CONTEXT:
-        //     // osc1.stop();
-        //     return { ...state };
-        case REDUCER_ACTION_TYPE.CHANGE_OSC1:
-            osc1[id as OscSetting].value = value;
-            return { ...state, osc1Settings: { ...state.osc1Settings, [id]: value } }
-        case REDUCER_ACTION_TYPE.CHANGE_OSC1_TYPE:
-            osc1.type = id as OscillatorType;
-            return { ...state, osc1Settings: { ...state.osc1Settings, type: id as OscillatorType } }
-        case REDUCER_ACTION_TYPE.CHANGE_FILTER:
-            filter[id as FilterSetting].value = value;
+        case 'START_CONTEXT':
+            // audioContext = new AudioContext();
+            // out = audioContext.destination
+            // osc1 = audioContext.createOscillator();
+            // gain1 = audioContext.createGain();
+            // filter = audioContext.createBiquadFilter();
+            // osc1.connect(gain1)
+            // gain1.connect(filter)
+            // filter.connect(out);
+            return { ...state };
+        case 'STOP_CONTEXT':
+            // osc1.stop();
+            return { ...state };
+        case 'CHANGE_OSC1':
+            osc1[action.payload.id].value = action.payload.value;
+            return { ...state, osc1Settings: { ...state.osc1Settings, [action.payload.id]: action.payload.value } }
+        case 'CHANGE_OSC1_TYPE':
+            osc1.type = action.payload.id as OscillatorType;
+            return { ...state, osc1Settings: { ...state.osc1Settings, type: action.payload.id as OscillatorType } }
+        case 'CHANGE_FILTER':
+            filter[action.payload.id as FilterSetting].value = action.payload.value;
             // return { ...state }
-            return { ...state, filterSettings: { ...state.filterSettings, [id]: value } }
-        case REDUCER_ACTION_TYPE.CHANGE_FILTER_TYPE:
-            filter.type = id as BiquadFilterType;
-            return { ...state, filterSettings: { ...state.filterSettings, type: id as BiquadFilterType } }
+            return { ...state, filterSettings: { ...state.filterSettings, [action.payload.id]: action.payload.value } }
+        case 'CHANGE_FILTER_TYPE':
+            filter.type = action.payload.id as BiquadFilterType;
+            return { ...state, filterSettings: { ...state.filterSettings, type: action.payload.id as BiquadFilterType } }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };

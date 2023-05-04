@@ -1,5 +1,5 @@
 import { ChangeEvent, MouseEvent, useContext } from 'react'
-import { CTX, REDUCER_ACTION_TYPE } from '../Store';
+import { CTX, OscSetting } from '../Store';
 // interface FilterSettings {
 //     frequency: number;
 //     detune: number;
@@ -14,12 +14,12 @@ const Filter = () => {
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
         let { id, value } = e.target;
-        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_FILTER, payload: { id, value } })
+        updateState({ type: 'CHANGE_FILTER', payload: { id: id as OscSetting, value: parseInt(value) } })
     };
 
     const changeType = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
-        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_FILTER_TYPE, payload: { id } })
+        updateState({ type: 'CHANGE_FILTER_TYPE', payload: { id } })
     }
     return (
         <div className="control">

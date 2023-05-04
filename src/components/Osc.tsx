@@ -1,3 +1,4 @@
+
 type Envelope = {
     attack: number;
     decay: number;
@@ -11,7 +12,7 @@ export default class Osc {
     gateGain: GainNode;
     easing: number;
     envelope: Envelope;
-    constructor(actx: AudioContext, type, frequency, detune, envelope: Envelope | null, connection) {
+    constructor(actx: AudioContext, type: OscillatorType, frequency: number, detune: number, envelope: Envelope | null, connection: AudioNode) {
         this.actx = actx;
         this.envelope = envelope || {
             attack: 0.005,

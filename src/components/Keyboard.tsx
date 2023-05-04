@@ -24,11 +24,11 @@ const Keyboard = () => {
         });
         console.log(window)
         console.log("keyboard: ", keyboard)
-        keyboard.keyDown = (note, freq) => {
-            updateState({ type: "MAKE_OSC", payload: { note, freq } })
+        keyboard.keyDown = (note, frequency) => {
+            updateState({ type: "MAKE_OSC", payload: { note, frequency } })
         };
-        keyboard.keyUp = (note, freq) => {
-            updateState({ type: "KILL_OSC", payload: { note, freq } })
+        keyboard.keyUp = (note, frequency) => {
+            updateState({ type: "KILL_OSC", payload: { note, frequency } })
         }
     }, [])
     return (

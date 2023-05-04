@@ -11,7 +11,7 @@
 // }
 
 import { MouseEvent, ChangeEvent, useContext } from 'react';
-import { CTX, osc1, REDUCER_ACTION_TYPE } from '../Store'
+import { CTX, osc1, OscSetting } from '../Store'
 
 const Osc1 = () => {
     const { appState, updateState } = useContext(CTX);
@@ -20,12 +20,12 @@ const Osc1 = () => {
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
         let { id, value } = e.target;
-        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_OSC1, payload: { id, value } })
+        updateState({ type: 'CHANGE_OSC1', payload: { id: id as OscSetting, value: parseInt(value) } })
     }
 
     const changeType = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
-        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_OSC1_TYPE, payload: { id } })
+        updateState({ type: 'CHANGE_OSC1_TYPE', payload: { id } })
     }
     return (
         <div className="control">
