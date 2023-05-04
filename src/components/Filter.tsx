@@ -1,5 +1,6 @@
 import { ChangeEvent, MouseEvent, useContext } from 'react'
 import { CTX, OscSetting } from '../Store';
+// import LogarithmicRange from './logarithmic-inputs/LogarithmicRange';
 
 const Filter = () => {
     const { appState, updateState } = useContext(CTX);
@@ -10,6 +11,10 @@ const Filter = () => {
         updateState({ type: 'CHANGE_FILTER', payload: { id: id as OscSetting, value: parseInt(value) } })
     };
 
+    // const logChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+    // }
+
     const changeType = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
         updateState({ type: 'CHANGE_FILTER_TYPE', payload: { id } })
@@ -19,6 +24,7 @@ const Filter = () => {
             <h2>Filter</h2>
             <div className="param">
                 <h3>Frequency</h3>
+                {/* <LogarithmicRange onChange={change} /> */}
                 <input value={frequency} type="range" onChange={change} id="frequency" max="10000" />
             </div>
             <div className="param">
