@@ -1,7 +1,10 @@
 import { useContext, useEffect } from 'react'
 import { CTX } from '../Store'
-import * as QwertyHancock from 'qwerty-hancock';
+// import * as QwertyHancock from 'qwerty-hancock';
+import * as QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock';
+// import { QwertyHancock } from '../qwerty-hancock/src/qwerty-hancock.js';
 console.log("QwertyHancock: ", QwertyHancock)
+// console.log("QwertyHancock: ", QwertyHancock.exports)
 // import { QwertyHancock } from 'qwerty-hancock';
 
 
@@ -16,25 +19,29 @@ type QwertyHancockInput = {
     activeColour?: string,
     borderColour?: string,
 }
+
+interface QwertyHancock {
+    version: string;
+
+    keyDown: (note: string, frequency: number) => void;
+
+    keyUp: (note: string, frequency: number) => void;
+
+    setKeyOctave: (octave: number) => void;
+
+    getKeyOctave: () => void;
+    keyOctaveUp: () => void;
+    keyOctaveDown: () => void;
+
+    getKeyMap: () => void;
+    setKeyMap: () => void;
+}
+
+type QwertyHancockFunction = (input: QwertyHancockInput) => QwertyHancock;
+
 declare global {
     interface Window {
-        QwertyHancock: (input: QwertyHancockInput) => {
-            version: string;
-
-            keyDown: (note: string, frequency: number) => void;
-
-            keyUp: (note: string, frequency: number) => void;
-
-            setKeyOctave: (octave: number) => void;
-
-            getKeyOctave: () => void;
-            keyOctaveUp: () => void;
-            keyOctaveDown: () => void;
-
-            getKeyMap: () => void;
-            setKeyMap: () => void;
-        }
-
+        QwertyHancock: QwertyHancockFunction;
     }
 }
 
@@ -43,6 +50,8 @@ const Keyboard = () => {
 
     useEffect(() => {
         const keyboard = window.QwertyHancock({
+            // const keyboard = QwertyHancock({
+            // const keyboard: QwertyHancock = QwertyHancock({
             // const keyboard = new QwertyHancock({
             id: "keyboard",
             width: "450",
