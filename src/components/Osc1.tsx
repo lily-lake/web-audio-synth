@@ -1,8 +1,8 @@
-interface Osc1Props {
-    // change: (e: any) => void;
-    changeType: (e: any) => void;
-    // settings: Osc1Settings
-}
+// interface Osc1Props {
+//     // change: (e: any) => void;
+//     changeType: (e: any) => void;
+//     // settings: Osc1Settings
+// }
 
 // interface Osc1Settings {
 //     frequency: number;
@@ -11,7 +11,7 @@ interface Osc1Props {
 // }
 
 import { MouseEvent, ChangeEvent, useContext } from 'react';
-import { CTX, osc1 } from '../Store'
+import { CTX, osc1, REDUCER_ACTION_TYPE } from '../Store'
 
 const Osc1 = () => {
     const { appState, updateState } = useContext(CTX);
@@ -20,12 +20,12 @@ const Osc1 = () => {
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
         let { id, value } = e.target;
-        updateState({ type: 'CHANGE_OSC1', payload: { id, value } })
+        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_OSC1, payload: { id, value } })
     }
 
     const changeType = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
-        updateState({ type: "CHANGE_OSC1_TYPE", payload: { id } })
+        updateState({ type: REDUCER_ACTION_TYPE.CHANGE_OSC1_TYPE, payload: { id } })
     }
     return (
         <div className="control">

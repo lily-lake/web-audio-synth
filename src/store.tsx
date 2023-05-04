@@ -47,10 +47,10 @@ export const enum REDUCER_ACTION_TYPE {
 
 type ReducerAction = {
     payload: {
-        id: string;
-        value: number;
-        note: any;
-        freq: any;
+        id?: string;
+        value?: number | string;
+        note?: any;
+        freq?: number;
     };
     type: REDUCER_ACTION_TYPE;
 }
