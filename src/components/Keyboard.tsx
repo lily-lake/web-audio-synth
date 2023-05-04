@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react'
 import { CTX } from '../Store'
 // import * as QwertyHancock from 'qwerty-hancock';
-import * as QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock';
-// import { QwertyHancock } from '../qwerty-hancock/src/qwerty-hancock.js';
-console.log("QwertyHancock: ", QwertyHancock)
+// import * as QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock';
+import { initQwertyHancock } from '../qwerty-hancock/src/qwerty-hancock.js';
+console.log("QwertyHancock: ", initQwertyHancock)
 // console.log("QwertyHancock: ", QwertyHancock.exports)
 // import { QwertyHancock } from 'qwerty-hancock';
 
@@ -45,12 +45,16 @@ declare global {
     }
 }
 
+console.log('react global this :', this)
+
+
 const Keyboard = () => {
+    console.log('react this:', this)
     const { updateState } = useContext(CTX);
 
     useEffect(() => {
-        const keyboard = window.QwertyHancock({
-            // const keyboard = QwertyHancock({
+        // const keyboard = window.QwertyHancock({
+        const keyboard = initQwertyHancock({
             // const keyboard: QwertyHancock = QwertyHancock({
             // const keyboard = new QwertyHancock({
             id: "keyboard",
@@ -62,7 +66,6 @@ const Keyboard = () => {
             blackKeyColour: 'rgb(10, 70, 67)',
             activeColour: 'rgb(166, 49, 172)',
             borderColour: 'white',
-
         });
         console.log(window)
         console.log("keyboard: ", keyboard)

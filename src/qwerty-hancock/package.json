@@ -5,7 +5,6 @@
   "description": "An interactive HTML plugin-free keyboard for your web audio project.",
   "version": "0.10.0",
   "main": "dist/qwerty-hancock.js",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git@github.com:stuartmemo/qwerty-hancock.git"

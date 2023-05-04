@@ -8,8 +8,39 @@
  *
  * http://stuartmemo.com/qwerty-hancock
  */
+// var QwertyHancock = function (settings) {
+//     this.version = version;
 
-(function () {
+// import QwertyHancock from "../dist/qwerty-hancock";
+
+//     this.keyDown = function () {
+//         // Placeholder function.
+//     };
+
+//     this.keyUp = function () {
+//         // Placeholder function.
+//     };
+
+//     this.setKeyOctave = function(octave){
+//         // Placeholder function.
+//     };
+
+//     this.getKeyOctave = function(){};
+//     this.keyOctaveUp = function(){};
+//     this.keyOctaveDown = function(){};
+
+//     this.getKeyMap = function(){};
+//     this.setKeyMap = function(newKeyMap){};
+
+//     init.call(this, settings);
+//     // return this;
+//     return {version: this.version, keyDown: this.keyDown, keyUp: this.keyUp, setKeyOctave: this.setKeyOctave, getKeyOctave: this.getKeyOctave, keyOctaveDown: this.keyOctaveDown, getKeyMap: this.getKeyMap, setKeyMap: this.setKeyMap, keyOctaveUp: this.keyOctaveUp};
+// };
+
+
+
+// (function () {
+export function initQwertyHancock(settings) {
     // var root = this;
     var root = window;
     /* In <script> context, `this` is the window.
@@ -59,9 +90,9 @@
      * Merge user settings with defaults.
      * @param  {object} user_settings
      */
-    var init = function (us) {
+    var init = function (keyboard, us) {
         var container;
-
+        debugger;
         var user_settings = us || {};
 
         settings = {
@@ -93,31 +124,32 @@
         settings.keyOctave = user_settings.keyOctave || settings.startOctave;
 
         // Add getters and setters
-        this.setKeyOctave = function(octave){
+        keyboard.setKeyOctave = function(octave){
             settings.keyOctave = octave;
             return settings.keyOctave;
         }
-        this.getKeyOctave = function(){
+        keyboard.getKeyOctave = function(){
             return settings.keyOctave;
         }
-        this.keyOctaveUp = function(){
+        keyboard.keyOctaveUp = function(){
             settings.keyOctave++;
             return settings.keyOctave;
         }
-        this.keyOctaveDown = function(){
+        keyboard.keyOctaveDown = function(){
             settings.keyOctave--;
             return settings.keyOctave;
         }
-        this.getKeyMap = function(){
+        keyboard.getKeyMap = function(){
             return key_map;
         }
-        this.setKeyMap = function(newKeyMap){
+        keyboard.setKeyMap = function(newKeyMap){
             key_map = newKeyMap;
             return key_map;
         }
 
         createKeyboard();
-        addListeners.call(this, container);
+        // addListeners.call(this, container);
+        addListeners(keyboard, container);
     };
 
     /**
@@ -495,8 +527,8 @@
      * Add event listeners to keyboard.
      * @param {element} keyboard_element
      */
-    var addListeners = function (keyboard_element) {
-        var that = this;
+    var addListeners = function (keyboard, keyboard_element) {
+        var that = keyboard;
 
         if (settings.musicalTyping) {
             // Key is pressed down on keyboard.
@@ -564,38 +596,45 @@
      * Qwerty Hancock constructor.
      * @param {object} settings Optional user settings.
      */
-    var QwertyHancock = function (settings) {
-        this.version = version;
-
-        this.keyDown = function () {
-            // Placeholder function.
-        };
-
-        this.keyUp = function () {
-            // Placeholder function.
-        };
-
-        this.setKeyOctave = function(octave){
-            // Placeholder function.
-        };
-
-        this.getKeyOctave = function(){};
-        this.keyOctaveUp = function(){};
-        this.keyOctaveDown = function(){};
-
-        this.getKeyMap = function(){};
-        this.setKeyMap = function(newKeyMap){};
-
-        init.call(this, settings);
-        return this;
-    };
-
-    if (typeof exports !== 'undefined') {
-      if (typeof module !== 'undefined' && module.exports) {
-        exports = module.exports = QwertyHancock;
-      }
-      exports.QwertyHancock = QwertyHancock;
-    } else {
-      root.QwertyHancock = QwertyHancock;
+        function QwertyHancock(settings) {
+    
+            const keyDown = function () {
+                // Placeholder function.
+            };
+    
+            const keyUp = function () {
+                // Placeholder function.
+            };
+    
+            const setKeyOctave = function(octave){
+                // Placeholder function.
+            };
+    
+            const getKeyOctave = function(){};
+            const keyOctaveUp = function(){};
+            const keyOctaveDown = function(){};
+    
+            const getKeyMap = function(){};
+            const setKeyMap = function(newKeyMap){};
+            const keyboard = {version, keyDown, keyUp, setKeyOctave, getKeyOctave, keyOctaveDown, getKeyMap, setKeyMap, keyOctaveUp}
+            init(keyboard, settings);
+            // return this;
+            return keyboard;
+            // return {version, keyDown, keyUp, setKeyOctave, getKeyOctave, keyOctaveDown, getKeyMap, setKeyMap, keyOctaveUp};
     }
-})(this);
+
+    // if (typeof exports !== 'undefined') {
+    //   if (typeof module !== 'undefined' && module.exports) {
+    //     exports = module.exports = QwertyHancock;
+    //   }
+    //   exports.QwertyHancock = QwertyHancock;
+    // } else {
+    //   root.QwertyHancock = QwertyHancock;
+    // }
+    return QwertyHancock(settings);
+    // const keyboard = hancock.QwertyHancock(settings);
+    // return keyboard;
+};
+// })(this);
+// export { QwertyHancock}
+console.log('global this: ', this)
