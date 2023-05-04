@@ -1,31 +1,10 @@
 import React, { ReactNode, useReducer, Dispatch } from "react";
 import Osc from "./components/Osc";
-// let audioContext: AudioContext;
-// let out;
-// let osc1: OscillatorNode;
-// let gain1;
-// let filter: BiquadFilterNode;
-
-// window.onload = function () {
-
-//     audioContext = new AudioContext()
-//     out = audioContext.destination
-//     osc1 = audioContext.createOscillator();
-//     gain1 = audioContext.createGain();
-//     filter = audioContext.createBiquadFilter();
-//     osc1.connect(gain1)
-//     gain1.connect(filter)
-//     filter.connect(out);
-// }
-
-// osc1.start();
 
 let actx = new AudioContext()
 let out = actx.destination
-export let osc1 = actx.createOscillator();
 let gain1 = actx.createGain();
 let filter = actx.createBiquadFilter();
-osc1.connect(gain1)
 gain1.connect(filter)
 filter.connect(out);
 
@@ -46,30 +25,6 @@ export type REDUCER_ACTION_TYPE =
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
     { type: 'default', payload: '' }
 
-
-// export const enum REDUCER_ACTION_TYPE {
-//     START_OSC,
-//     STOP_OSC,
-//     START_CONTEXT,
-//     STOP_CONTEXT,
-//     CHANGE_OSC1,
-//     CHANGE_OSC1_TYPE,
-//     CHANGE_FILTER,
-//     CHANGE_FILTER_TYPE,
-//     MAKE_OSC,
-//     KILL_OSC,
-//     default
-// }
-
-// type ReducerAction = {
-//     payload?: {
-//         id?: string;
-//         value?: number;
-//         note?: any;
-//         freq?: number;
-//     };
-//     type: REDUCER_ACTION_TYPE;
-// }
 type FilterSettings = {
     frequency: number;
     detune: number;
@@ -78,7 +33,7 @@ type FilterSettings = {
     type: BiquadFilterType;
 }
 type Osc1Settings = {
-    frequency: number;
+    // frequency: number;
     detune: number;
     type: OscillatorType;
 }
@@ -89,9 +44,9 @@ type ReducerState = {
 
 const initialState: ReducerState = {
     osc1Settings: {
-        frequency: osc1.frequency.value || 0,
-        detune: osc1.detune.value || 0,
-        type: osc1.type || 'sine'
+        // frequency: osc1.frequency.value || 0,
+        detune: 0,
+        type: 'sine'
     },
     filterSettings: {
         frequency: filter.frequency.value || 0,
@@ -113,14 +68,8 @@ export const CTX = React.createContext<ContextType>({
     updateState: () => { },
 });
 
-// export const CTX = React.createContext({initialState
-// });
-
-
-
 let nodes: Osc[] = [];
 
-// export const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): ReducerState => {
     // let { id, value, freq } = action.payload || {};
     console.log('state: ', state)
@@ -128,7 +77,7 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
     switch (action.type) {
         case 'MAKE_OSC':
             // console.log('make osc, note and freq: ', note, freq);
-            const newOsc = new Osc(actx, "sawtooth", action.payload.frequency, 0, null, gain1);
+            const newOsc = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, null, gain1);
             nodes.push(newOsc);
             return { ...state };
         case 'KILL_OSC':
@@ -141,55 +90,13 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
                 }
             });
             nodes = newNodes;
-            // console.log('kill osc, note and freq: ', note, freq);
-            return { ...state };
-        // case 'START_OSC':
-        //     console.log('start osc')
-        //     // gain1 = audioContext.createGain();
-        //     // filter = audioContext.createBiquadFilter();
-        //     // osc1.connect(gain1)
-        //     // gain1.connect(filter)
-        //     // filter.connect(out);
-        //     osc1.start();
-        //     return { ...state };
-        // case 'STOP_OSC':
-        //     osc1.stop();
-        //     return { ...state };
-        case 'START_OSC':
-            actx = new AudioContext();
-            out = actx.destination
-            osc1 = actx.createOscillator();
-            gain1 = actx.createGain();
-            filter = actx.createBiquadFilter();
-            osc1.connect(gain1)
-            gain1.connect(filter)
-            filter.connect(out);
-            return { ...state };
-        case 'STOP_OSC':
-            // osc1.stop();
-            return { ...state };
-        case 'START_CONTEXT':
-            // audioContext = new AudioContext();
-            // out = audioContext.destination
-            // osc1 = audioContext.createOscillator();
-            // gain1 = audioContext.createGain();
-            // filter = audioContext.createBiquadFilter();
-            // osc1.connect(gain1)
-            // gain1.connect(filter)
-            // filter.connect(out);
-            return { ...state };
-        case 'STOP_CONTEXT':
-            // osc1.stop();
             return { ...state };
         case 'CHANGE_OSC1':
-            osc1[action.payload.id].value = action.payload.value;
             return { ...state, osc1Settings: { ...state.osc1Settings, [action.payload.id]: action.payload.value } }
         case 'CHANGE_OSC1_TYPE':
-            osc1.type = action.payload.id as OscillatorType;
             return { ...state, osc1Settings: { ...state.osc1Settings, type: action.payload.id as OscillatorType } }
         case 'CHANGE_FILTER':
             filter[action.payload.id as FilterSetting].value = action.payload.value;
-            // return { ...state }
             return { ...state, filterSettings: { ...state.filterSettings, [action.payload.id]: action.payload.value } }
         case 'CHANGE_FILTER_TYPE':
             filter.type = action.payload.id as BiquadFilterType;
@@ -201,12 +108,11 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
 }
 
 export default function Store(props: { children: ReactNode }) {
-    // const stateHook = useReducer(reducer, {
     const [appState, updateState] = useReducer(reducer, {
         osc1Settings: {
-            frequency: osc1.frequency.value,
-            detune: osc1.detune.value,
-            type: osc1.type
+            // frequency: osc1.frequency.value,
+            detune: 0,
+            type: 'sine'
         },
         filterSettings: {
             frequency: filter.frequency.value,

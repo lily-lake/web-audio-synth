@@ -30,4 +30,8 @@ button {
     &:hover {
         background: rgb(210, 143, 238);
     }
+
+    &:focus {
+        outline: 0;
+    }
 }

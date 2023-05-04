@@ -1,12 +1,5 @@
 import { ChangeEvent, MouseEvent, useContext } from 'react'
 import { CTX, OscSetting } from '../Store';
-// interface FilterSettings {
-//     frequency: number;
-//     detune: number;
-//     Q: number;
-//     gain: number;
-//     type: BiquadFilterType;
-// }
 
 const Filter = () => {
     const { appState, updateState } = useContext(CTX);
@@ -46,7 +39,7 @@ const Filter = () => {
                 <button onClick={changeType} id="lowpass" className={`${type === "lowpass" && "active"}`}>lowpass</button>
                 <button onClick={changeType} id="highpass" className={`${type === "highpass" && "active"}`}>highpass</button>
                 <button onClick={changeType} id="notch" className={`${type === "notch" && "active"}`}>notch</button>
-                <button onClick={changeType} id="lowshelf" className={`${type === "lowshelf" && "active"}`}>lowpass</button>
+                <button onClick={changeType} id="lowshelf" className={`${type === "lowshelf" && "active"}`}>lowshelf</button>
                 <button onClick={changeType} id="highshelf" className={`${type === "highshelf" && "active"}`}>highshelf</button>
             </div>
         </div>

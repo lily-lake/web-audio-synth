@@ -1,22 +1,9 @@
-// interface Osc1Props {
-//     // change: (e: any) => void;
-//     changeType: (e: any) => void;
-//     // settings: Osc1Settings
-// }
-
-// interface Osc1Settings {
-//     frequency: number;
-//     detune: number;
-//     type: OscillatorType;
-// }
-
 import { MouseEvent, ChangeEvent, useContext } from 'react';
-import { CTX, osc1, OscSetting } from '../Store'
+import { CTX, OscSetting } from '../Store'
 
 const Osc1 = () => {
     const { appState, updateState } = useContext(CTX);
-    // console.log("appState: ", appState)
-    const { type, frequency, detune } = appState?.osc1Settings;
+    const { type, detune } = appState?.osc1Settings;
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
         let { id, value } = e.target;
@@ -30,14 +17,10 @@ const Osc1 = () => {
     return (
         <div className="control">
             <h2>Osc 1</h2>
-            <button onClick={() => osc1.start()}>Start</button>
-            <button onClick={() => osc1.stop()}>Stop</button>
-            {/* <button onClick={() => updateState({ type: "START_OSC" })}>Start</button>
-            <button onClick={() => updateState({ type: "STOP_OSC" })}>Stop</button> */}
-            <div className="param">
+            {/* <div className="param">
                 <h3>Frequency</h3>
                 <input type="range" max="5000" value={frequency} id="frequency" onChange={change} />
-            </div>
+            </div> */}
             <div className="param">
                 <h3>Detune</h3>
                 <input type="range" id="detune" onChange={change} value={detune} />
