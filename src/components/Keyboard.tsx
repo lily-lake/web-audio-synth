@@ -5,6 +5,39 @@ console.log("QwertyHancock: ", QwertyHancock)
 // import { QwertyHancock } from 'qwerty-hancock';
 
 
+type QwertyHancockInput = {
+    id?: string,
+    width?: string,
+    height?: string,
+    octaves?: number,
+    startNote?: string,
+    whiteKeyColour?: string,
+    blackKeyColour?: string,
+    activeColour?: string,
+    borderColour?: string,
+}
+declare global {
+    interface Window {
+        QwertyHancock: (input: QwertyHancockInput) => {
+            version: string;
+
+            keyDown: (note: string, frequency: number) => void;
+
+            keyUp: (note: string, frequency: number) => void;
+
+            setKeyOctave: (octave: number) => void;
+
+            getKeyOctave: () => void;
+            keyOctaveUp: () => void;
+            keyOctaveDown: () => void;
+
+            getKeyMap: () => void;
+            setKeyMap: () => void;
+        }
+
+    }
+}
+
 const Keyboard = () => {
     const { updateState } = useContext(CTX);
 
