@@ -11,3 +11,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(max-content, 600px));
 }
+
+.sliders {
+  display: grid;
+  // grid-template-columns: 100%;
+  // grid-template-rows: repeat(2, 50px);
+  justify-content: center;
+}

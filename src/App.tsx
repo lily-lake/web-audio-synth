@@ -6,6 +6,7 @@ import Keyboard from './components/Keyboard';
 import ADSR from './components/ADSR';
 import LogarithmicRange, { LogValues } from './components/logarithmic-inputs/LogarithmicRange';
 import LogarithmicSlider, { SliderChangeValues } from './components/logarithmic-inputs/LogarithmicSlider';
+import LogarithmicKnob from './components/logarithmic-inputs/LogarithmicKnob';
 function App() {
   const handleChange = (newValues: LogValues) => {
     console.log(newValues)
@@ -18,8 +19,11 @@ function App() {
     <>
       <h1>Oscillator</h1>
       {/* <Context /> */}
-      <LogarithmicRange onChange={handleChange} />
-      <LogarithmicSlider onChange={handleSliderChange} />
+      <div className="sliders">
+        <LogarithmicRange onChange={handleChange} />
+        <LogarithmicSlider onChange={handleSliderChange} />
+        <LogarithmicKnob />
+      </div>
       <div className="controls">
         <Osc1 />
         <ADSR />
