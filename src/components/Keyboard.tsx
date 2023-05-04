@@ -2,13 +2,13 @@ import { useContext, useEffect } from 'react'
 import { CTX } from '../Store'
 // import * as QwertyHancock from 'qwerty-hancock';
 // import * as QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock';
-import { initQwertyHancock } from '../qwerty-hancock/src/qwerty-hancock.js';
-console.log("QwertyHancock: ", initQwertyHancock)
+import { Hancock } from '../qwerty-hancock/src/qwerty-hancock.js';
+console.log("QwertyHancock: ", Hancock)
 // console.log("QwertyHancock: ", QwertyHancock.exports)
 // import { QwertyHancock } from 'qwerty-hancock';
 
 
-type QwertyHancockInput = {
+export type QwertyHancockInput = {
     id?: string,
     width?: string,
     height?: string,
@@ -20,7 +20,7 @@ type QwertyHancockInput = {
     borderColour?: string,
 }
 
-interface QwertyHancock {
+export interface QwertyHancock {
     version: string;
 
     keyDown: (note: string, frequency: number) => void;
@@ -45,16 +45,15 @@ declare global {
     }
 }
 
-console.log('react global this :', this)
 
 
 const Keyboard = () => {
-    console.log('react this:', this)
     const { updateState } = useContext(CTX);
 
     useEffect(() => {
         // const keyboard = window.QwertyHancock({
-        const keyboard = initQwertyHancock({
+        const keyboard = new Hancock()
+        keyboard.initQwertyHancock({
             // const keyboard: QwertyHancock = QwertyHancock({
             // const keyboard = new QwertyHancock({
             id: "keyboard",
@@ -69,10 +68,10 @@ const Keyboard = () => {
         });
         console.log(window)
         console.log("keyboard: ", keyboard)
-        keyboard.keyDown = (note, frequency) => {
+        keyboard.keyDown = (note: string, frequency: number) => {
             updateState({ type: "MAKE_OSC", payload: { note, frequency } })
         };
-        keyboard.keyUp = (note, frequency) => {
+        keyboard.keyUp = (note: string, frequency: number) => {
             updateState({ type: "KILL_OSC", payload: { note, frequency } })
         }
     }, [])
