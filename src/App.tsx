@@ -4,6 +4,7 @@ import Filter from './components/Filter';
 import Keyboard from './components/Keyboard';
 import ADSR from './components/ADSR';
 import LogarithmicKnob from './components/logarithmic-inputs/LogarithmicKnob';
+import Gain from './components/Gain';
 function App() {
 
 
@@ -15,6 +16,7 @@ function App() {
         <LogarithmicKnob />
       </div>
       <div className="controls">
+        <Gain />
         <Osc1 />
         <ADSR />
         <Filter />

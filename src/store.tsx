@@ -25,6 +25,7 @@ export type REDUCER_ACTION_TYPE =
     { type: 'MAKE_OSC', payload: { note: string, frequency: number } } |
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
+    { type: 'CHANGE_GAIN', payload: { value: number } } |
     { type: 'default', payload: '' }
 
 type FilterSettings = {
@@ -50,6 +51,7 @@ type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
     envelope: EnvelopeSettings;
+    gain: number;
 }
 
 const initialState: ReducerState = {
@@ -70,7 +72,8 @@ const initialState: ReducerState = {
         decay: 0.1,
         sustain: 0.6,
         release: 0.1
-    }
+    },
+    gain: 1
 }
 
 interface ContextType {
@@ -115,6 +118,9 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
             return { ...state, filterSettings: { ...state.filterSettings, type: action.payload.id as BiquadFilterType } }
         case 'CHANGE_ADSR':
             return { ...state, envelope: { ...state.envelope, [action.payload.id]: action.payload.value } }
+        case 'CHANGE_GAIN':
+            gain1.gain.value = action.payload.value;
+            return { ...state, gain: action.payload.value }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };
@@ -140,7 +146,8 @@ export default function Store(props: { children: ReactNode }) {
             decay: 0.1,
             sustain: 0.6,
             release: 0.1
-        }
+        },
+        gain: 1
     });
     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
 
