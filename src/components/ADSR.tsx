@@ -1,5 +1,6 @@
 import { ChangeEvent, useContext } from 'react'
 import { CTX } from '../Store'
+import LogarithmicRange, { LogValues } from './logarithmic-inputs/LogarithmicRange';
 
 const ADSR = () => {
     const { appState, updateState } = useContext(CTX);
@@ -9,11 +10,17 @@ const ADSR = () => {
         let { id, value } = e.target;
         updateState({ type: 'CHANGE_ADSR', payload: { id, value: parseInt(value) } })
     }
+    const logChange = (values: LogValues) => {
+        console.log('slider values: ', values)
+        updateState({ type: 'CHANGE_ADSR', payload: { id: "attack", value: values.value - 1 } })
+    }
     return (
         <div className="control"><h2>ADSR</h2>
             <div className="param">
                 <h3>attack</h3>
-                <input type="range" id="attack" onChange={change} max="2" step="0.02" value={attack} />
+                {/* <input type="range" id="attack" onChange={change} max="2" step="0.02" value={attack} /> */}
+                <LogarithmicRange onChange={logChange} maxval={5} minval={0} defaultValue={attack} />
+
             </div>
             <div className="param">
                 <h3>decay</h3>

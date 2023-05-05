@@ -1,7 +1,7 @@
 import { ChangeEvent, MouseEvent, useContext } from 'react'
 import { CTX, OscSetting } from '../Store';
-// import LogarithmicRange from './logarithmic-inputs/LogarithmicRange';
-
+import LogarithmicRange, { LogValues } from './logarithmic-inputs/LogarithmicRange';
+// import LogarithmicSlider, { SliderChangeValues } from './logarithmic-inputs/LogarithmicSlider';
 const Filter = () => {
     const { appState, updateState } = useContext(CTX);
     const { frequency, detune, Q, gain, type } = appState.filterSettings;
@@ -14,6 +14,10 @@ const Filter = () => {
     // const logChange = (e: ChangeEvent<HTMLInputElement>) => {
 
     // }
+    const logChange = (values: LogValues) => {
+        console.log('slider values: ', values)
+        updateState({ type: 'CHANGE_FILTER', payload: { id: "frequency" as OscSetting, value: values.value } })
+    }
 
     const changeType = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
@@ -24,8 +28,7 @@ const Filter = () => {
             <h2>Filter</h2>
             <div className="param">
                 <h3>Frequency</h3>
-                {/* <LogarithmicRange onChange={change} /> */}
-                <input value={frequency} type="range" onChange={change} id="frequency" max="10000" />
+                <LogarithmicRange onChange={logChange} maxval={10000} defaultValue={frequency} />
             </div>
             <div className="param">
                 <h3>Detune</h3>
@@ -33,6 +36,7 @@ const Filter = () => {
             </div>
             <div className="param">
                 <h3>Gain</h3>
+                {/* {appState.filterSettings.type === "notch" && <LogarithmicSlider onChange={logSliderChange} />} */}
                 <input value={gain} type="range" onChange={change} id="gain" max="10" />
             </div>
             <div className="param">
