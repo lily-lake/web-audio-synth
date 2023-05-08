@@ -7,17 +7,18 @@ export interface LogValues {
 }
 
 interface RangeProps {
-    onChange: (newValues: LogValues) => void;
+    // onChange: (newValues: LogValues) => void;
+    onChange: (id: string, value: number) => void;
     defaultValue?: number;
     minpos?: number;
     maxpos?: number;
     minval?: number;
     maxval?: number;
-
+    id: string;
 }
 
 
-const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxval = 1600, defaultValue }: RangeProps) => {
+const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxval = 1600, defaultValue, id }: RangeProps) => {
     const log = new Log({
         minpos,
         maxpos,
@@ -29,7 +30,7 @@ const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxv
 
 
     const calculateValue = (position: number) => {
-        if (position === 0) return 0
+        // if (position === 0) return 0
         const value = log.value(position)
         if (value > 1000) return Math.round(value / 100) * 100
         if (value > 500) return Math.round(value / 10) * 10
@@ -37,6 +38,7 @@ const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxv
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newPosition = parseInt(e.target.value);
+        // const id = e.target.id;
         setPosition(newPosition);
         if (!onChange) {
             return console.error('Pass an onChange function to <LogarithmicRange />')
@@ -45,7 +47,8 @@ const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxv
             position: newPosition,
             value: calculateValue(newPosition)
         }
-        onChange(newValues)
+        onChange(id, newValues.value);
+        // onChange(newValues)
     }
     return (
         <input type="range" min={minpos} max={maxpos} value={position} onChange={handleChange} />
