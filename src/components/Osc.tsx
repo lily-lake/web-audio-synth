@@ -42,10 +42,16 @@ export default class Osc {
     stop() {
         let { currentTime } = this.actx;
         this.gateGain.gain.cancelScheduledValues(currentTime);
-        this.gateGain.gain.setTargetAtTime(0, currentTime, this.envelope.release + this.easing);
+        const releaseTime = (this.envelope.release + this.easing)
+        // multiplier to approximate linear behaviour
+        // https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime
+        const releaseDecayTime = releaseTime / 4
+        this.gateGain.gain.setTargetAtTime(0, currentTime, releaseDecayTime);
+        this.gateGain.gain.setValueAtTime(0, currentTime + releaseTime);
+
         setTimeout(() => {
             this.osc.disconnect();
-        }, 3000);
-        // }, 10000);
+            // }, 3000);
+        }, 10000);
     }
 }

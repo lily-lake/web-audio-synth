@@ -33,17 +33,20 @@ const ADSR = () => {
             </div>
             <div className="param">
                 <h3>decay</h3>
-                <input type="range" id="decay" onChange={change} max="1" step="0.01" value={decay} />
+                {/* <input type="range" id="decay" onChange={change} max="1" step="0.01" value={decay} /> */}
+                <LogarithmicRange onChange={logChange} maxval={5} minval={0} defaultValue={decay} id="decay" />
                 <p>{decay.toFixed(2)}</p>
             </div>
             <div className="param">
                 <h3>sustain</h3>
-                <input type="range" id="sustain" onChange={change} max="1" step="0.01" value={sustain} />
+                {/* <input type="range" id="sustain" onChange={change} max="1" step="0.01" value={sustain} /> */}
+                <LogarithmicRange onChange={logChange} maxval={2} minval={0} defaultValue={sustain} id="sustain" />
                 <p>{sustain.toFixed(2)}</p>
             </div>
             <div className="param">
                 <h3>release</h3>
-                <input type="range" id="release" onChange={change} max="2" step="0.02" value={release} />
+                {/* <input type="range" id="release" onChange={change} max="2" step="0.02" value={release} /> */}
+                <LogarithmicRange onChange={logChange} maxval={5} minval={0} defaultValue={release} id="release" />
                 <p>{release.toFixed(2)}</p>
             </div>
         </div>
