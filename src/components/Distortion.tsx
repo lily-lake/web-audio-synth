@@ -1,34 +1,39 @@
-import { ChangeEvent, MouseEvent, useContext } from 'react'
-import { CTX } from '../Store';
+import { ChangeEvent, MouseEvent, useState } from 'react'
 
-const Distortion = () => {
-    const { appState, updateState } = useContext(CTX);
-    const { distortion } = appState;
-    const { oversample, curve } = distortion;
+// type WaveshaperSettings = {
+//     curve: Float32Array;
+//     oversample: OverSampleType;
+//     // oversample: 'none' | '2x' | '4x';
+// }
+
+const Distortion = (props: { waveShaper: WaveShaperNode }) => {
+    const { waveShaper } = props;
+    const [oversample, setOversample] = useState(waveShaper.oversample)
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
-        let { value } = e.target;
-        updateState({ type: 'CHANGE_DISTORTION_CURVE', payload: { value: makeDistortionCurve(parseFloat(value)) } })
+        let value = makeDistortionCurve(parseFloat(e.target.value));
+        waveShaper.curve = value;
     };
 
 
     const changeOversample = (e: MouseEvent<HTMLButtonElement>) => {
         let { id } = e.target as HTMLElement;
-        updateState({ type: 'CHANGE_DISTORTION_OVERSAMPLE', payload: { value: id as OverSampleType } })
+        setOversample(id as OverSampleType);
+        waveShaper.oversample = id as OverSampleType;
+        console.log(waveShaper.oversample);
     }
     return (
         <div className="control">
             <h2>Distortion</h2>
             <div className="param">
                 <h3>curve</h3>
-                {/* <input value={curve} type="range" onChange={change} min={1} max={100} step={0.01} /> */}
                 <input type="range" onChange={change} min={1} max={1000} step={0.01} />
             </div>
             <div className="param">
                 <h3>Oversample</h3>
-                <button onClick={changeOversample} id="none" className={`${oversample === "none" && "active"}`}>none</button>
-                <button onClick={changeOversample} id="2x" className={`${oversample === "2x" && "active"}`}>2x</button>
-                <button onClick={changeOversample} id="4x" className={`${oversample === "4x" && "active"}`}>4x</button>
+                <button onClick={changeOversample} id="none" className={`${oversample.toString() === "none" && "active"}`}>none</button>
+                <button onClick={changeOversample} id="2x" className={`${oversample.toString() === "2x" && "active"}`}>2x</button>
+                <button onClick={changeOversample} id="4x" className={`${oversample.toString() === "4x" && "active"}`}>4x</button>
             </div>
         </div>
     )
@@ -69,10 +74,10 @@ function makeDistortionCurve(amount: number) {
         let value = ((3 + amount) * x * 20 * deg) / (Math.PI + amount * Math.abs(x));
         const rand = Math.random()
 
-        if (rand < 0.9) {
-            value += rand
-            value = Math.min(value, .1)
-        }
+        // if (rand < 0.9) {
+        //     value += rand
+        //     value = Math.min(value, .1)
+        // }
 
         curve[i] = value
     }

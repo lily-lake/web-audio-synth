@@ -1,12 +1,12 @@
 import React, { ReactNode, useReducer, Dispatch } from "react";
 import Osc from "./components/Osc";
 
-let actx = new AudioContext()
-let out = actx.destination
-let gain = actx.createGain();
-let distortion = actx.createWaveShaper();
-let filter = actx.createBiquadFilter();
-let compressor = actx.createDynamicsCompressor();
+export let actx = new AudioContext()
+export let out = actx.destination
+export let gain = actx.createGain();
+export let distortion = actx.createWaveShaper();
+export let filter = actx.createBiquadFilter();
+export let compressor = actx.createDynamicsCompressor();
 gain.connect(distortion)
 distortion.connect(filter)
 filter.connect(compressor);
@@ -64,17 +64,12 @@ type CompressorSettings = {
     threshold: number;
 }
 
-type WaveshaperSettings = {
-    curve: Float32Array;
-    oversample: OverSampleType;
-    // oversample: 'none' | '2x' | '4x';
-}
+
 type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
     envelope: EnvelopeSettings;
     gain: number;
-    distortion: WaveshaperSettings;
     compressor: CompressorSettings;
 }
 
@@ -98,10 +93,6 @@ const initialState: ReducerState = {
         release: 0.1
     },
     gain: 1,
-    distortion: {
-        curve: new Float32Array(44100),
-        oversample: 'none'
-    },
     compressor: {
         attack: 0,
         knee: 40,
@@ -156,12 +147,6 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
         case 'CHANGE_GAIN':
             gain.gain.value = action.payload.value;
             return { ...state, gain: action.payload.value }
-        case 'CHANGE_DISTORTION_OVERSAMPLE':
-            distortion.oversample = action.payload.value;
-            return { ...state, distortion: { ...state.distortion, oversample: action.payload.value } }
-        case 'CHANGE_DISTORTION_CURVE':
-            distortion.curve = action.payload.value;
-            return { ...state, distortion: { ...state.distortion, curve: action.payload.value } }
         case 'CHANGE_COMPRESSOR':
             // compressor[action.payload.id as FilterSetting].value = action.payload.value;
             compressor[action.payload.id as CompressorSetting].setValueAtTime(action.payload.value, actx.currentTime);
