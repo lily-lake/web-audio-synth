@@ -72,8 +72,8 @@ function makeDistortionCurve(amount: number) {
 
         // unmodified value
         let value = ((3 + amount) * x * 20 * deg) / (Math.PI + amount * Math.abs(x));
-        const rand = Math.random()
 
+        // const rand = Math.random()
         // if (rand < 0.9) {
         //     value += rand
         //     value = Math.min(value, .1)

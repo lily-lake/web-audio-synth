@@ -15,7 +15,6 @@ compressor.connect(out)
 
 export type OscSetting = "frequency" | "detune"
 type FilterSetting = "frequency" | "detune" | "Q" | "gain"
-type CompressorSetting = "attack" | "knee" | "ratio" | "release" | "threshold"
 
 export type REDUCER_ACTION_TYPE =
     { type: 'START_OSC', payload: string } |
@@ -30,10 +29,6 @@ export type REDUCER_ACTION_TYPE =
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
     { type: 'CHANGE_GAIN', payload: { value: number } } |
-    { type: 'CHANGE_DISTORTION', payload: { value: number } } |
-    { type: 'CHANGE_COMPRESSOR', payload: { id: string, value: number } } |
-    { type: 'CHANGE_DISTORTION_OVERSAMPLE', payload: { value: OverSampleType } } |
-    { type: 'CHANGE_DISTORTION_CURVE', payload: { value: Float32Array } } |
     { type: 'default', payload: '' }
 
 type FilterSettings = {
@@ -147,10 +142,6 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
         case 'CHANGE_GAIN':
             gain.gain.value = action.payload.value;
             return { ...state, gain: action.payload.value }
-        case 'CHANGE_COMPRESSOR':
-            // compressor[action.payload.id as FilterSetting].value = action.payload.value;
-            compressor[action.payload.id as CompressorSetting].setValueAtTime(action.payload.value, actx.currentTime);
-            return { ...state, compressor: { ...state.compressor, [action.payload.id]: action.payload.value } }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };

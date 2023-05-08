@@ -7,7 +7,7 @@ import LogarithmicKnob from './components/logarithmic-inputs/LogarithmicKnob';
 import Gain from './components/Gain';
 import Distortion from './components/Distortion';
 import Compressor from './components/Compressor';
-import { distortion } from './Store';
+import { distortion, compressor, actx } from './Store';
 function App() {
 
 
@@ -21,7 +21,7 @@ function App() {
       <div className="controls">
         <Gain />
         <Distortion waveShaper={distortion} />
-        <Compressor />
+        <Compressor compressor={compressor} audioContext={actx} />
         <Osc1 />
         <ADSR />
         <Filter />
