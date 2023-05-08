@@ -3,18 +3,20 @@
 #root {
   // max-width: 1280px;
   // margin: 0 auto;
-  padding: 2rem;
+  // padding: 2rem;
   text-align: center;
 }
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(max-content, 600px));
+  // grid-template-columns: repeat(auto-fill, minmax(max-content, 600px));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 300px));
 }
 
 .sliders {
   display: grid;
-  // grid-template-columns: 100%;
+  grid-template-columns: 100%;
+  // grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
   // grid-template-rows: repeat(2, 50px);
   justify-content: center;
 }

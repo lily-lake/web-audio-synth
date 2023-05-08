@@ -3,15 +3,17 @@ import Osc from "./components/Osc";
 
 let actx = new AudioContext()
 let out = actx.destination
-let gain1 = actx.createGain();
-// gain1.gain.value = 0.2;
+let gain = actx.createGain();
 let filter = actx.createBiquadFilter();
-gain1.connect(filter)
-filter.connect(out);
+let compressor = actx.createDynamicsCompressor();
+gain.connect(filter)
+filter.connect(compressor);
+compressor.connect(out)
 
 
 export type OscSetting = "frequency" | "detune"
 type FilterSetting = "frequency" | "detune" | "Q" | "gain"
+type CompressorSetting = "attack" | "knee" | "ratio" | "release" | "threshold"
 
 export type REDUCER_ACTION_TYPE =
     { type: 'START_OSC', payload: string } |
@@ -26,6 +28,7 @@ export type REDUCER_ACTION_TYPE =
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
     { type: 'CHANGE_GAIN', payload: { value: number } } |
+    { type: 'CHANGE_COMPRESSOR', payload: { id: string, value: number } } |
     { type: 'default', payload: '' }
 
 type FilterSettings = {
@@ -47,11 +50,27 @@ type EnvelopeSettings = {
     sustain: number;
     release: number;
 }
+
+type CompressorSettings = {
+    attack: number;
+    knee: number;
+    ratio: number;
+    // reduction: number;
+    release: number;
+    threshold: number;
+    // attack: AudioParam;
+    // knee: AudioParam;
+    // ratio: AudioParam;
+    // reduction: number;
+    // release: AudioParam;
+    // threshold: AudioParam;
+}
 type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
     envelope: EnvelopeSettings;
     gain: number;
+    compressor: CompressorSettings;
 }
 
 const initialState: ReducerState = {
@@ -73,7 +92,15 @@ const initialState: ReducerState = {
         sustain: 0.6,
         release: 0.1
     },
-    gain: 1
+    gain: 1,
+    compressor: {
+        attack: 0,
+        knee: 40,
+        ratio: 12,
+        // reduction: 0,
+        release: 0.25,
+        threshold: -50
+    }
 }
 
 interface ContextType {
@@ -92,7 +119,7 @@ let nodes: Osc[] = [];
 export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): ReducerState => {
     switch (action.type) {
         case 'MAKE_OSC':
-            const newOsc = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, state.envelope, gain1);
+            const newOsc = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, state.envelope, gain);
             nodes.push(newOsc);
             return { ...state };
         case 'KILL_OSC':
@@ -119,8 +146,12 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
         case 'CHANGE_ADSR':
             return { ...state, envelope: { ...state.envelope, [action.payload.id]: action.payload.value } }
         case 'CHANGE_GAIN':
-            gain1.gain.value = action.payload.value;
+            gain.gain.value = action.payload.value;
             return { ...state, gain: action.payload.value }
+        case 'CHANGE_COMPRESSOR':
+            // compressor[action.payload.id as FilterSetting].value = action.payload.value;
+            compressor[action.payload.id as CompressorSetting].setValueAtTime(action.payload.value, actx.currentTime);
+            return { ...state, compressor: { ...state.compressor, [action.payload.id]: action.payload.value } }
         default:
             console.log('reducer error. action: ', action);
             return { ...state };
@@ -147,7 +178,15 @@ export default function Store(props: { children: ReactNode }) {
             sustain: 0.6,
             release: 0.1
         },
-        gain: 1
+        gain: 1,
+        compressor: {
+            attack: 0,
+            knee: 40,
+            ratio: 12,
+            // reduction: 0,
+            release: 0.25,
+            threshold: -50
+        }
     });
     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
 
