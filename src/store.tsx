@@ -4,9 +4,11 @@ import Osc from "./components/Osc";
 let actx = new AudioContext()
 let out = actx.destination
 let gain = actx.createGain();
+let distortion = actx.createWaveShaper();
 let filter = actx.createBiquadFilter();
 let compressor = actx.createDynamicsCompressor();
-gain.connect(filter)
+gain.connect(distortion)
+distortion.connect(filter)
 filter.connect(compressor);
 compressor.connect(out)
 
@@ -28,7 +30,10 @@ export type REDUCER_ACTION_TYPE =
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
     { type: 'CHANGE_GAIN', payload: { value: number } } |
+    { type: 'CHANGE_DISTORTION', payload: { value: number } } |
     { type: 'CHANGE_COMPRESSOR', payload: { id: string, value: number } } |
+    { type: 'CHANGE_DISTORTION_OVERSAMPLE', payload: { value: OverSampleType } } |
+    { type: 'CHANGE_DISTORTION_CURVE', payload: { value: Float32Array } } |
     { type: 'default', payload: '' }
 
 type FilterSettings = {
@@ -39,7 +44,6 @@ type FilterSettings = {
     type: BiquadFilterType;
 }
 type Osc1Settings = {
-    // frequency: number;
     detune: number;
     type: OscillatorType;
 }
@@ -58,18 +62,19 @@ type CompressorSettings = {
     // reduction: number;
     release: number;
     threshold: number;
-    // attack: AudioParam;
-    // knee: AudioParam;
-    // ratio: AudioParam;
-    // reduction: number;
-    // release: AudioParam;
-    // threshold: AudioParam;
+}
+
+type WaveshaperSettings = {
+    curve: Float32Array;
+    oversample: OverSampleType;
+    // oversample: 'none' | '2x' | '4x';
 }
 type ReducerState = {
     osc1Settings: Osc1Settings;
     filterSettings: FilterSettings;
     envelope: EnvelopeSettings;
     gain: number;
+    distortion: WaveshaperSettings;
     compressor: CompressorSettings;
 }
 
@@ -93,6 +98,10 @@ const initialState: ReducerState = {
         release: 0.1
     },
     gain: 1,
+    distortion: {
+        curve: new Float32Array(44100),
+        oversample: 'none'
+    },
     compressor: {
         attack: 0,
         knee: 40,
@@ -105,7 +114,6 @@ const initialState: ReducerState = {
 
 interface ContextType {
     appState: ReducerState;
-    // updateState: Dispatch<ReducerAction>;
     updateState: Dispatch<REDUCER_ACTION_TYPE>;
 }
 
@@ -148,6 +156,12 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
         case 'CHANGE_GAIN':
             gain.gain.value = action.payload.value;
             return { ...state, gain: action.payload.value }
+        case 'CHANGE_DISTORTION_OVERSAMPLE':
+            distortion.oversample = action.payload.value;
+            return { ...state, distortion: { ...state.distortion, oversample: action.payload.value } }
+        case 'CHANGE_DISTORTION_CURVE':
+            distortion.curve = action.payload.value;
+            return { ...state, distortion: { ...state.distortion, curve: action.payload.value } }
         case 'CHANGE_COMPRESSOR':
             // compressor[action.payload.id as FilterSetting].value = action.payload.value;
             compressor[action.payload.id as CompressorSetting].setValueAtTime(action.payload.value, actx.currentTime);
@@ -159,36 +173,45 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
 }
 
 export default function Store(props: { children: ReactNode }) {
-    const [appState, updateState] = useReducer(reducer, {
-        osc1Settings: {
-            // frequency: osc1.frequency.value,
-            detune: 0,
-            type: 'sine'
-        },
-        filterSettings: {
-            frequency: filter.frequency.value,
-            detune: filter.detune.value,
-            Q: filter.Q.value,
-            gain: filter.gain.value,
-            type: filter.type,
-        },
-        envelope: {
-            attack: 0.005,
-            decay: 0.1,
-            sustain: 0.6,
-            release: 0.1
-        },
-        gain: 1,
-        compressor: {
-            attack: 0,
-            knee: 40,
-            ratio: 12,
-            // reduction: 0,
-            release: 0.25,
-            threshold: -50
-        }
-    });
-    // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
-
+    const [appState, updateState] = useReducer(reducer, initialState);
     return <CTX.Provider value={{ appState, updateState }} > {props.children}</CTX.Provider >
 }
+
+// export default function Store(props: { children: ReactNode }) {
+//     const [appState, updateState] = useReducer(reducer, {
+//         osc1Settings: {
+//             // frequency: osc1.frequency.value,
+//             detune: 0,
+//             type: 'sine'
+//         },
+//         filterSettings: {
+//             frequency: filter.frequency.value,
+//             detune: filter.detune.value,
+//             Q: filter.Q.value,
+//             gain: filter.gain.value,
+//             type: filter.type,
+//         },
+//         envelope: {
+//             attack: 0.005,
+//             decay: 0.1,
+//             sustain: 0.6,
+//             release: 0.1
+//         },
+//         gain: 1,
+//         distortion: {
+//             curve: new Float32Array(44100),
+//             oversample: 'none'
+//         },
+//         compressor: {
+//             attack: 0,
+//             knee: 40,
+//             ratio: 12,
+//             // reduction: 0,
+//             release: 0.25,
+//             threshold: -50
+//         }
+//     });
+//     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
+
+//     return <CTX.Provider value={{ appState, updateState }} > {props.children}</CTX.Provider >
+// }
