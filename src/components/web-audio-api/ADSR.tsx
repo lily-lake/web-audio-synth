@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { CTX } from '../Store'
-import LogarithmicRange from './logarithmic-inputs/LogarithmicRange';
+import { CTX } from '../../Store'
+import LogarithmicRange from '../logarithmic-inputs/LogarithmicRange';
 
 const ADSR = () => {
     const { appState, updateState } = useContext(CTX);

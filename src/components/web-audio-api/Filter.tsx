@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useContext } from 'react'
-import { CTX, OscSetting } from '../Store';
-import LogarithmicRange from './logarithmic-inputs/LogarithmicRange';
+import { CTX, OscSetting } from '../../Store';
+import LogarithmicRange from '../logarithmic-inputs/LogarithmicRange';
 // import LogarithmicSlider, { SliderChangeValues } from './logarithmic-inputs/LogarithmicSlider';
 const Filter = () => {
     const { appState, updateState } = useContext(CTX);

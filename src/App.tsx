@@ -1,24 +1,21 @@
 import './App.scss'
-import Osc1 from './components/Osc1';
-import LFO1 from './components/LFO1';
-import Filter from './components/Filter';
+import Osc1 from './components/web-audio-api/Osc1';
+import LFO1 from './components/web-audio-api/LFO1';
+import Filter from './components/web-audio-api/Filter';
 import Keyboard from './components/Keyboard';
-import ADSR from './components/ADSR';
-import LogarithmicKnob from './components/logarithmic-inputs/LogarithmicKnob';
-import Gain from './components/Gain';
-import Distortion from './components/Distortion';
-import Compressor from './components/Compressor';
+import ADSR from './components/web-audio-api/ADSR';
+import Gain from './components/web-audio-api/Gain';
+import Distortion from './components/web-audio-api/Distortion';
+import Compressor from './components/web-audio-api/Compressor';
+// import Synth from './components/Synth';
 import { distortion, compressor, actx } from './Store';
+import { getMidiInputs } from './components/midi';
 function App() {
-
-
-
+  getMidiInputs()
   return (
     <>
       <h1>Oscillator</h1>
-      <div className="sliders">
-        <LogarithmicKnob />
-      </div>
+      {/* <Synth /> */}
       <div className="controls">
         <Gain />
         <Distortion waveShaper={distortion} />

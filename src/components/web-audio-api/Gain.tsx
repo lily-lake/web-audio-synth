@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext } from 'react'
-import { CTX } from '../Store';
+import { CTX } from '../../Store';
 
 const Gain = () => {
     const { appState, updateState } = useContext(CTX);

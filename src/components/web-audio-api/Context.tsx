@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { CTX } from '../Store'
+import { CTX } from '../../Store'
 
 const Context = () => {
     const { updateState } = useContext(CTX);

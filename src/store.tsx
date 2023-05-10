@@ -1,9 +1,11 @@
 import React, { ReactNode, useReducer, Dispatch } from "react";
-import Osc from "./components/Osc";
+import Osc from "./components/web-audio-api/Osc";
+import * as Tone from 'tone';
 
 export let actx = new AudioContext()
 export let out = actx.destination
 export let gain = actx.createGain();
+const synth = new Tone.Synth().toDestination();
 export let distortion = actx.createWaveShaper();
 export let filter = actx.createBiquadFilter();
 export let compressor = actx.createDynamicsCompressor();
@@ -27,6 +29,8 @@ export type REDUCER_ACTION_TYPE =
     { type: 'CHANGE_FILTER_TYPE', payload: { id: string } } |
     { type: 'MAKE_OSC', payload: { note?: string, frequency: number } } |
     { type: 'KILL_OSC', payload: { note?: string, frequency: number } } |
+    { type: 'PLAY_SYNTH', payload: { frequency: number, duration: string } } |
+    { type: 'STOP_SYNTH', payload: { frequency?: number, duration?: string } } |
     { type: 'MAKE_LFO', payload: { note: string, frequency: number } } |
     { type: 'KILL_LFO', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_LFO1', payload: { id: OscSetting, value: number } } |
@@ -139,6 +143,12 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
             });
             nodes = newNodes;
             return { ...state };
+        case 'PLAY_SYNTH':
+            synth.triggerAttack(action.payload.frequency);
+            return { ...state };
+        case 'STOP_SYNTH':
+            synth.triggerRelease();
+            return { ...state };
         case 'MAKE_LFO':
             const newLFO = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, state.envelope, gain);
             nodes.push(newLFO);
@@ -179,42 +189,3 @@ export default function Store(props: { children: ReactNode }) {
     const [appState, updateState] = useReducer(reducer, initialState);
     return <CTX.Provider value={{ appState, updateState }} > {props.children}</CTX.Provider >
 }
-
-// export default function Store(props: { children: ReactNode }) {
-//     const [appState, updateState] = useReducer(reducer, {
-//         osc1Settings: {
-//             // frequency: osc1.frequency.value,
-//             detune: 0,
-//             type: 'sine'
-//         },
-//         filterSettings: {
-//             frequency: filter.frequency.value,
-//             detune: filter.detune.value,
-//             Q: filter.Q.value,
-//             gain: filter.gain.value,
-//             type: filter.type,
-//         },
-//         envelope: {
-//             attack: 0.005,
-//             decay: 0.1,
-//             sustain: 0.6,
-//             release: 0.1
-//         },
-//         gain: 1,
-//         distortion: {
-//             curve: new Float32Array(44100),
-//             oversample: 'none'
-//         },
-//         compressor: {
-//             attack: 0,
-//             knee: 40,
-//             ratio: 12,
-//             // reduction: 0,
-//             release: 0.25,
-//             threshold: -50
-//         }
-//     });
-//     // return <CTX.Provider value={stateHook}>{props.children}</CTX.Provider>
-
-//     return <CTX.Provider value={{ appState, updateState }} > {props.children}</CTX.Provider >
-// }

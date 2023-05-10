@@ -1,5 +1,5 @@
 import { MouseEvent, ChangeEvent, useContext } from 'react';
-import { CTX, OscSetting } from '../Store'
+import { CTX, OscSetting } from '../../Store'
 
 const Osc1 = () => {
     const { appState, updateState } = useContext(CTX);
