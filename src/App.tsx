@@ -1,5 +1,6 @@
 import './App.scss'
 import Osc1 from './components/Osc1';
+import LFO1 from './components/LFO1';
 import Filter from './components/Filter';
 import Keyboard from './components/Keyboard';
 import ADSR from './components/ADSR';
@@ -23,6 +24,7 @@ function App() {
         <Distortion waveShaper={distortion} />
         <Compressor compressor={compressor} audioContext={actx} />
         <Osc1 />
+        <LFO1 />
         <ADSR />
         <Filter />
       </div>

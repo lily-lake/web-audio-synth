@@ -7,3 +7,5 @@ cd qwerty-hancock && npm link
 cd ..
 npm link qwerty-hancock
 ```
+
+<https://github.com/Tonejs/Midi>

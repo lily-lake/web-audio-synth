@@ -27,6 +27,10 @@ export type REDUCER_ACTION_TYPE =
     { type: 'CHANGE_FILTER_TYPE', payload: { id: string } } |
     { type: 'MAKE_OSC', payload: { note: string, frequency: number } } |
     { type: 'KILL_OSC', payload: { note: string, frequency: number } } |
+    { type: 'MAKE_LFO', payload: { note: string, frequency: number } } |
+    { type: 'KILL_LFO', payload: { note: string, frequency: number } } |
+    { type: 'CHANGE_LFO1', payload: { id: OscSetting, value: number } } |
+    { type: 'CHANGE_LFO1_TYPE', payload: { id: string } } |
     { type: 'CHANGE_ADSR', payload: { id: string, value: number } } |
     { type: 'CHANGE_GAIN', payload: { value: number } } |
     { type: 'default', payload: '' }
@@ -39,6 +43,7 @@ type FilterSettings = {
     type: BiquadFilterType;
 }
 type Osc1Settings = {
+    frequency?: number;
     detune: number;
     type: OscillatorType;
 }
@@ -66,11 +71,17 @@ type ReducerState = {
     envelope: EnvelopeSettings;
     gain: number;
     compressor: CompressorSettings;
+    lfo1Settings: Osc1Settings;
 }
 
 const initialState: ReducerState = {
     osc1Settings: {
         // frequency: osc1.frequency.value || 0,
+        detune: 0,
+        type: 'sine'
+    },
+    lfo1Settings: {
+        frequency: 1,
         detune: 0,
         type: 'sine'
     },
@@ -84,7 +95,7 @@ const initialState: ReducerState = {
     envelope: {
         attack: 0.005,
         decay: 0.1,
-        sustain: 0.6,
+        sustain: 1,
         release: 0.1
     },
     gain: 1,
@@ -109,6 +120,7 @@ export const CTX = React.createContext<ContextType>({
 });
 
 let nodes: Osc[] = [];
+// let LFONodes: Osc[] = [];
 
 export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): ReducerState => {
     switch (action.type) {
@@ -126,6 +138,21 @@ export const reducer = (state: ReducerState, action: REDUCER_ACTION_TYPE): Reduc
                 }
             });
             nodes = newNodes;
+            return { ...state };
+        case 'MAKE_LFO':
+            const newLFO = new Osc(actx, state.osc1Settings.type, action.payload.frequency, state.osc1Settings.detune, state.envelope, gain);
+            nodes.push(newLFO);
+            return { ...state };
+        case 'KILL_LFO':
+            let newLFONodes: Osc[] = [];
+            nodes.forEach(node => {
+                if (Math.round(node.osc.frequency.value) === Math.round(action.payload.frequency)) {
+                    node.stop();
+                } else {
+                    newLFONodes.push(node);
+                }
+            });
+            nodes = newLFONodes;
             return { ...state };
         case 'CHANGE_OSC1':
             return { ...state, osc1Settings: { ...state.osc1Settings, [action.payload.id]: action.payload.value } }

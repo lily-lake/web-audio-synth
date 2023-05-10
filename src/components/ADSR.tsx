@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext } from 'react'
+import { useContext } from 'react'
 import { CTX } from '../Store'
 import LogarithmicRange from './logarithmic-inputs/LogarithmicRange';
 
@@ -6,10 +6,6 @@ const ADSR = () => {
     const { appState, updateState } = useContext(CTX);
     let { attack, decay, sustain, release } = appState.envelope;
 
-    const change = (e: ChangeEvent<HTMLInputElement>) => {
-        let { id, value } = e.target;
-        updateState({ type: 'CHANGE_ADSR', payload: { id, value: parseInt(value) } })
-    }
     const logChange = (id: string, value: number) => {
         // console.log('slider values: ', values)
         console.log("id, value: ", id, value)
