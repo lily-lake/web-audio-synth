@@ -38,7 +38,6 @@ const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxv
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newPosition = parseInt(e.target.value);
-        // const id = e.target.id;
         setPosition(newPosition);
         if (!onChange) {
             return console.error('Pass an onChange function to <LogarithmicRange />')
@@ -48,7 +47,6 @@ const LogarithmicRange = ({ onChange, minpos = 0, maxpos = 100, minval = 5, maxv
             value: calculateValue(newPosition)
         }
         onChange(id, newValues.value);
-        // onChange(newValues)
     }
     return (
         <input type="range" min={minpos} max={maxpos} value={position} onChange={handleChange} />
