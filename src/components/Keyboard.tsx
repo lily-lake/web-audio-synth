@@ -1,6 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CTX } from '../Store.js'
 import AudioKeys from 'audiokeys'
+import Qwerty from '../qwerty-hancock/Keyboard'
 
 export type QwertyHancockInput = {
     id?: string,
@@ -43,12 +44,14 @@ declare global {
 
 const Keyboard = () => {
     const { updateState } = useContext(CTX);
+    const [mobile, setMobile] = useState(false);
 
     useEffect(() => {
         // const keyboard = window.QwertyHancock({
         const keyboard = new AudioKeys({})
 
         keyboard.down((note: AudioKeysNoteData) => {
+            console.log('note: ', note)
             updateState({ type: "MAKE_OSC", payload: { frequency: note.frequency } })
         });
         keyboard.up((note: AudioKeysNoteData) => {
@@ -56,7 +59,10 @@ const Keyboard = () => {
         })
     }, [])
     return (
-        <div className="keyboard-container"><div id="keyboard"></div></div>
+        <div>
+            <button onClick={() => setMobile(!mobile)}>{mobile ? "hide mobile keyboard" : "show mobile keyboard"}</button>
+            {mobile && <Qwerty />}
+        </div>
     )
 }
 

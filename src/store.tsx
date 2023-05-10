@@ -25,8 +25,8 @@ export type REDUCER_ACTION_TYPE =
     { type: 'CHANGE_OSC1_TYPE', payload: { id: string } } |
     { type: 'CHANGE_FILTER', payload: { id: string, value: number } } |
     { type: 'CHANGE_FILTER_TYPE', payload: { id: string } } |
-    { type: 'MAKE_OSC', payload: { frequency: number } } |
-    { type: 'KILL_OSC', payload: { frequency: number } } |
+    { type: 'MAKE_OSC', payload: { note?: string, frequency: number } } |
+    { type: 'KILL_OSC', payload: { note?: string, frequency: number } } |
     { type: 'MAKE_LFO', payload: { note: string, frequency: number } } |
     { type: 'KILL_LFO', payload: { note: string, frequency: number } } |
     { type: 'CHANGE_LFO1', payload: { id: OscSetting, value: number } } |

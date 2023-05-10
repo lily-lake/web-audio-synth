@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, KeyboardEvent } from 'react'
 import { CTX } from '../Store.js'
 // import * as QwertyHancock from 'qwerty-hancock';
 // import * as QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock';
@@ -76,7 +76,9 @@ const Keyboard = () => {
         }
     }, [])
     return (
-        <div className="keyboard-container"><div id="keyboard"></div></div>
+        <div onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => e.preventDefault()}>
+            <div className="keyboard-container"><div id="keyboard"></div></div>
+        </div>
     )
 }
 
