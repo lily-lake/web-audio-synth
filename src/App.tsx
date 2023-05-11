@@ -9,25 +9,27 @@ import Distortion from './components/web-audio-api/Distortion';
 import Compressor from './components/web-audio-api/Compressor';
 // import Synth from './components/Synth';
 import { distortion, compressor, actx } from './Store';
-// import { MIDIAccess, onDeviceInput } from './components/midi';
+import MidiMap from './components/MidiMap';
+import { MidiContextProvider } from './components/MidiMap/midi';
 function App() {
-  // const midi = new MIDIAccess({ onDeviceInput })
-  // midi.start()
   return (
-    <>
-      <h1>Oscillator</h1>
-      {/* <Synth /> */}
-      <div className="controls">
-        <Gain />
-        <Distortion waveShaper={distortion} />
-        <Compressor compressor={compressor} audioContext={actx} />
-        <Osc1 />
-        <LFO1 />
-        <ADSR />
-        <Filter />
-      </div>
-      <Keyboard />
-    </>
+    <MidiContextProvider>
+      <>
+        <h1>Oscillator</h1>
+        {/* <Synth /> */}
+        <MidiMap />
+        <div className="controls">
+          <Gain />
+          <Distortion waveShaper={distortion} />
+          <Compressor compressor={compressor} audioContext={actx} />
+          <Osc1 />
+          <LFO1 />
+          <ADSR />
+          <Filter />
+        </div>
+        <Keyboard />
+      </>
+    </MidiContextProvider>
   )
 }
 
