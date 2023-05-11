@@ -2,12 +2,12 @@ export class MIDIAccess {
     devices: WebMidi.MIDIInput[];
     // onDeviceInput: (input: number, value: number) => any;
     // onDeviceInput: (message: WebMidi.MIDIMessageEvent) => any;
-    public onDeviceInput: (input: number, value: number) => any;
+    onDeviceInput: (input: number, value: number) => any;
     // constructor(args: {onDeviceInput: (message: WebMidi.MIDIMessageEvent) => any}) {
-    constructor(args: {onDeviceInput: (input: number, value: number) => any}) {
-        console.log('args: ', args)
+    constructor(onDeviceInput: (input: number, value: number) => void) {
+        // console.log('args: ', args)
         this.devices = []
-        this.onDeviceInput = args.onDeviceInput
+        this.onDeviceInput = onDeviceInput
     }
 
     start() {
@@ -26,13 +26,16 @@ export class MIDIAccess {
         for (let device of devices) {
             console.log(device)
             // device.onmidimessage = onMidiMessage;
+            // if (device.name === "Launch Control XL") {
+            //     this.initializeDevice(device)
+            // }
             this.initializeDevice(device)
         }
     }
 
     initializeDevice(device: WebMidi.MIDIInput) {
         // device.onmidimessage = this.onMidiMessage;
-        device.onmidimessage = this.onMessage;
+        device.onmidimessage = this.onMessage.bind(this);
     }
 
     onMessage(message: WebMidi.MIDIMessageEvent) {

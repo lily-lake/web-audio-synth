@@ -9,7 +9,7 @@ const ADSR = () => {
     const onDeviceInput = (input: number, value: number) => {
         logChange("attack", value)
     }
-    const midi = new MIDIAccess({ onDeviceInput })
+    const midi = new MIDIAccess(onDeviceInput)
     midi.start()
     const logChange = (id: string, value: number) => {
         console.log("id, value: ", id, value)
