@@ -1,24 +1,21 @@
 import { useContext } from 'react'
 import { CTX } from '../../Store'
 import LogarithmicRange from '../logarithmic-inputs/LogarithmicRange';
-
+import { MIDIAccess } from '../midi';
 const ADSR = () => {
     const { appState, updateState } = useContext(CTX);
     let { attack, decay, sustain, release } = appState.envelope;
 
+    const onDeviceInput = (input: number, value: number) => {
+        logChange("attack", value)
+    }
+    const midi = new MIDIAccess({ onDeviceInput })
+    midi.start()
     const logChange = (id: string, value: number) => {
-        // console.log('slider values: ', values)
         console.log("id, value: ", id, value)
-        // let { id, value } = e.target;
-        // updateState({ type: 'CHANGE_ADSR', payload: { id, value: parseInt(value) } })
         updateState({ type: 'CHANGE_ADSR', payload: { id, value: value - 1 } })
     }
-    // const logChange = (values: LogValues) => {
-    //     console.log('slider values: ', values)
-    //     // let { id, value } = e.target;
-    //     // updateState({ type: 'CHANGE_ADSR', payload: { id, value: parseInt(value) } })
-    //     updateState({ type: 'CHANGE_ADSR', payload: { id: "attack", value: values.value - 1 } })
-    // }
+
     return (
         <div className="control"><h2>ADSR</h2>
             <div className="param">

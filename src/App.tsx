@@ -9,9 +9,10 @@ import Distortion from './components/web-audio-api/Distortion';
 import Compressor from './components/web-audio-api/Compressor';
 // import Synth from './components/Synth';
 import { distortion, compressor, actx } from './Store';
-import { getMidiInputs } from './components/midi';
+// import { MIDIAccess, onDeviceInput } from './components/midi';
 function App() {
-  getMidiInputs()
+  // const midi = new MIDIAccess({ onDeviceInput })
+  // midi.start()
   return (
     <>
       <h1>Oscillator</h1>
