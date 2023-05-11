@@ -17,7 +17,6 @@ function App() {
       <>
         <h1>Oscillator</h1>
         {/* <Synth /> */}
-        <MidiMap />
         <div className="controls">
           <Gain />
           <Distortion waveShaper={distortion} />
@@ -28,6 +27,7 @@ function App() {
           <Filter />
         </div>
         <Keyboard />
+        <MidiMap />
       </>
     </MidiContextProvider>
   )

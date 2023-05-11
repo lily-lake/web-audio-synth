@@ -1,22 +1,13 @@
-import { useContext, createContext, PropsWithChildren } from 'react'
-import { MIDIAccess } from './midi'
+import { useMidiContext } from './midi'
 
-const midi = new MIDIAccess()
-midi.start();
-const MidiContext = createContext(midi);
-
-export const useMidiContext = () => useContext(MidiContext)
-
-const MidiContextProvider = (props: PropsWithChildren) => {
-    return <MidiContext.Provider value={midi}>{props.children}</MidiContext.Provider>
-}
 
 const MidiMap = () => {
+    const midiContext = useMidiContext();
     return (
-        <MidiContextProvider>
-
-            <div>MidiMap</div>
-        </MidiContextProvider>
+        <div className="midimap-container control">
+            <h2>MIDI Devices</h2>
+            <ul>{midiContext.devices.map(device => <li>{device.name}</li>)}</ul>
+        </div>
     )
 }
 
