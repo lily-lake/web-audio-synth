@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, PropsWithChildren } from 'react'
+import { useContext, createContext, PropsWithChildren } from 'react'
 
 export class MIDIAccess {
     devices: WebMidi.MIDIInput[];
@@ -34,12 +34,6 @@ export class MIDIAccess {
     onMessage(message: WebMidi.MIDIMessageEvent) {
         let [_, input, value] = message.data;
         this.onDeviceInput(input, value)
-    }
-
-
-    onMidiMessage(e: MIDIMessageEvent) {
-        // let [_, input, value] = e.data;
-        // console.log({input, value})
     }
 
     _requestAccess() {
